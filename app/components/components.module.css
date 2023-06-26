@@ -1,0 +1,45 @@
+.headerBar {
+    flex: 0 0 80px;
+    max-height: 80px;
+    background: linear-gradient(to right, white, lightblue);
+    display: grid;
+    grid-template-columns: 20% 25% 25% 25%;
+}
+
+@media (prefers-color-scheme: dark) {
+    .headerBar {
+        background: linear-gradient(to bottom right, #000137, black);
+    }
+}
+
+.headerTab {
+    min-height: 100%;
+    align-items: center;
+    justify-items: end;
+    padding: 10px;
+    font-size: 30px;
+    display: grid;
+    column-gap: 10px;
+    grid-template-columns: 40% 60%;
+}
+
+.headerTab p {
+    text-overflow: clip;
+    justify-self: start;
+    white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+    .headerBar {
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+    .headerTab {
+        justify-items: center;
+        column-gap: 0px;
+        grid-template-columns: 100%;
+    }
+    .headerTab p {
+        display: none;
+    }
+}
+
