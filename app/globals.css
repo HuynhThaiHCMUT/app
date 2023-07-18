@@ -108,11 +108,3 @@ a {
     color-scheme: dark;
   }
 }
-
-#child {
-  min-height: 400px;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
