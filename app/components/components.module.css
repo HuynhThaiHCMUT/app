@@ -1,9 +1,9 @@
 .headerBar {
-    flex: 0 0 80px;
-    max-height: 80px;
+    flex: 0 0 4rem;
+    max-height: 4rem;
     background: linear-gradient(to right, white, lightblue);
     display: grid;
-    grid-template-columns: 20% 25% 25% 25%;
+    grid-template-columns: 15% 25% 25% 25%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,10 +16,10 @@
     min-height: 100%;
     align-items: center;
     justify-items: end;
-    padding: 10px;
-    font-size: 30px;
+    padding: 0.75rem;
+    font-size: 2rem;
     display: grid;
-    column-gap: 10px;
+    column-gap: 0.75rem;
     grid-template-columns: 40% 60%;
 }
 
@@ -35,7 +35,7 @@
     }
     .headerTab {
         justify-items: center;
-        column-gap: 0px;
+        column-gap: none;
         grid-template-columns: 100%;
     }
     .headerTab p {

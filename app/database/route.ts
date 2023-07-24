@@ -4,9 +4,8 @@ import { Filter } from 'mongodb';
 
 export async function GET(req: NextRequest) {
     const client = await clientPromise;
-    const q = req.nextUrl.searchParams.get("q") ?? "";
+    const q = req.nextUrl.searchParams.get("q")?.replace(/[^A-Za-z0-9\s]/g, "") ?? "";
     let regex = `.*${q.split(" ").map((value) => `(.*${value}.*)`).join("&")}.*`;
-    console.log(regex);
     const query: Filter<any>[] = [{
         $search: {
             index: "name",
@@ -21,6 +20,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     return NextResponse.json({name: "POSTING"});
 }
