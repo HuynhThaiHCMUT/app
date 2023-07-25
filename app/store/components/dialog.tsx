@@ -30,7 +30,7 @@ function DelDialog({p}: {p: ProductData}) {
 
     useEffect(() => {
         async function deleteProduct() {
-            let res = await fetch(`http://localhost:3000/database?d=${p.id}`, {method: "DELETE"});
+            let res = await fetch(`database?d=${p.id}`, {method: "DELETE"});
             if (!res.ok) throw new Error("Failed to delete product");
             let dbres: DeleteResult = await res.json();
             if (dbres.deletedCount > 0) {

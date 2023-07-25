@@ -6,12 +6,13 @@ import { useContext, useEffect, useState } from 'react';
 import { faPen, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { DelDialog, EditDialog } from './dialog';
 import { Context } from '../contextProvider';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Store() {
     const {q, setQ, data, setData, showEditDialog, setShowEditDialog, showDelDialog ,setShowDelDialog, selectedProduct, select} = useContext(Context);
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`http://localhost:3000/database?q=${q}`, {cache: "no-store"});
+            let res = await fetch(`/database?q=${q}`, {cache: "no-store"});
             if (!res.ok) throw new Error("Failed to fetch data");
             let products = await res.json();
             setData(products);
