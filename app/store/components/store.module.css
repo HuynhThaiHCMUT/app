@@ -1,0 +1,136 @@
+.store {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+}
+
+.container button {
+    background-color: cornflowerblue;
+    color: white;
+    margin: 0.5rem;
+    padding: 0rem 0.5rem 0rem 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.container button:hover {
+    background-color: rgb(100, 100, 250);
+}
+
+.container button:active {
+    background-color: rgb(51, 51, 192);
+}
+
+.searchBar {
+    flex: 1;
+    font-size: 1.25rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    height: 2.25rem;
+    width: 1rem;
+}
+
+.table {
+    margin: 0.5rem;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+
+
+.tableHeader th {
+    background-color: lightblue;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody tr:nth-child(odd) {
+    background-color: white;
+    text-align: center;
+}
+
+.tableBody tr:nth-child(even) {
+    background-color: lightcyan;
+    text-align: center;
+}
+
+.tableBody tr td button {
+    background-color: transparent;
+    border-width: 0rem;
+    padding: 0.5rem;
+}
+
+.tableBody tr td button:hover {
+    color: red;
+}
+
+.tableBody tr td button:active {
+    color: darkred;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tableHeader th {
+        background-color: #000137;
+    }
+    
+    .tableBody tr:nth-child(odd) {
+        background-color: rgb(27, 30, 45);
+    }
+    
+    .tableBody tr:nth-child(even) {
+        background-color: black;
+    }
+}
+
+.id {
+    width: 9rem;
+}
+
+.quantity {
+    width: 5rem;
+}
+
+.unitName {
+    width: 6rem;
+}
+
+.price {
+    width: 6rem;
+}
+
+.basePrice {
+    width: 6rem;
+}
+
+.weight {
+    width: 5rem;
+}
+
+.action {
+    width: 4rem;
+}
+
+@media (max-width: 1000px) {
+    .id {
+        display: none;
+    }
+    .table tr td:nth-child(1) {
+        display: none;
+    }
+    .basePrice {
+        display: none;
+    }
+    .table tr td:nth-child(6) {
+        display: none;
+    }
+    .weight {
+        display: none;
+    }
+    .table tr td:nth-child(7) {
+        display: none;
+    }
+}

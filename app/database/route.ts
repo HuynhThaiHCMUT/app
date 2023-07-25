@@ -21,5 +21,15 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-    return NextResponse.json({name: "POSTING"});
+    return NextResponse.json({message: "POSTING"});
+}
+
+export async function DELETE(req: NextRequest) {
+    const client = await clientPromise;
+    let d = req.nextUrl.searchParams.get("d") ?? "";
+    let id = Number.parseInt(d);
+    if (Number.isNaN(id)) return NextResponse.json({acknowledged: false, deleteCount: 0});
+
+    let res = await client.db("AppData").collection("ProductData").deleteOne({id: id});
+    return NextResponse.json(res);
 }

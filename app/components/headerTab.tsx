@@ -17,5 +17,5 @@ export default function HeaderTab(props: tabProps) {
             <FontAwesomeIcon icon={props.icon}/>
             <p>{props.text}</p>
         </div>
-    </Link>
+    </Link>;
 }

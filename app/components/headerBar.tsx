@@ -9,5 +9,5 @@ export default function HeaderBar() {
         <HeaderTab href='/store' icon={faShop} text="Kho hàng"/>
         <HeaderTab href='/sale' icon={faCartShopping} text="Hoá đơn"/>
         <HeaderTab href='/history' icon={faClock} text="Lịch sử"/>
-    </div>
+    </div>;
 }   
