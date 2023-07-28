@@ -4,12 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './store.module.css'
 import { useContext, useEffect, useState } from 'react';
 import { faPen, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { DelDialog, EditDialog } from './dialog';
+import { AddDialog, DelDialog, EditDialog } from './dialog';
 import { Context } from '../contextProvider';
-import { usePathname, useRouter } from 'next/navigation';
 
 export default function Store() {
-    const {q, setQ, data, setData, showEditDialog, setShowEditDialog, showDelDialog ,setShowDelDialog, selectedProduct, select} = useContext(Context);
+    const {q, setQ, data, setData, showAddDialog, setShowAddDialog, showEditDialog, setShowEditDialog, showDelDialog ,setShowDelDialog, selectedProduct, select} = useContext(Context);
     useEffect(() => {
         async function getData() {
             let res = await fetch(`/database?q=${q}`, {cache: "no-store"});
@@ -18,7 +17,7 @@ export default function Store() {
             setData(products);
         };
         getData();
-    }, [q, showEditDialog, showDelDialog]);
+    }, [q, showAddDialog, showEditDialog, showDelDialog]);
 
     const editItem = (p: ProductData) => {
         select(p);
@@ -33,7 +32,7 @@ export default function Store() {
     };
 
     return <div className={styles.store}>
-
+        <AddDialog/>
         <DelDialog p={selectedProduct}/>
         <EditDialog p={selectedProduct}/>
         <div className={styles.container}>
@@ -44,7 +43,7 @@ export default function Store() {
             onChange={(e) => {
                 setQ(e.target.value.replace(/[^A-Za-z0-9\s]/g, ""))
             }}/>
-            <button>Thêm sản phẩm</button>
+            <button onClick={() => setShowAddDialog(true)}>Thêm sản phẩm</button>
         </div>
         <table className={styles.table}>
             <thead className={styles.tableHeader}>

@@ -15,10 +15,72 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    font-size: 1.25rem;
     border-radius: 2rem;
+    padding: 2rem;
+}
+
+.editDialog > h1 {
+    align-self: center;
+    margin-bottom: 1rem;
+}
+
+.editDialog > input {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
     width: 30rem;
-    height: 20rem;
+}
+
+.editDialog > button {
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    width: 30rem;
+    background-color: transparent;
+    border-style: solid;
+    padding: 0.25rem;
+}
+
+.editDialog > button:hover {
+    color: green;
+}
+
+.editDialog > button:active {
+    color: darkgreen;
+}
+
+.unitContainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+.unitContainer > div {
+    margin-right: 1rem;
+}
+
+.unitContainer input {
+    font-size: 1.25rem;
+    width: 6rem;
+    margin-bottom: 0rem;
+}
+
+.unitContainer > button {
+    background-color: transparent;
+    height: 1.75rem;
+    width: 1.75rem;
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+    align-self: flex-end;
+    border-width: 0rem;
+}
+
+.unitContainer > button:hover {
+    color: red;
+}
+
+.unitContainer > button:active {
+    color: darkred;
 }
 
 .delDialog {
@@ -28,24 +90,27 @@
     justify-content: center;
     align-items: center;
     border-radius: 2rem;
-    padding: 1rem;
+    padding: 2rem;
 }
 
-.delDialog h1 {
+.delDialog > h1 {
     margin-bottom: 1rem;
-}
-
-.dialogBackground button {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    font-size: 1.25rem;
-    border-radius: 0.25rem;
-    border-width: none;
 }
 
 .buttonContainer {
     padding-top: 1rem;
     display: flex;
+}
+
+.buttonContainer > button {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    border-radius: 0.25rem;
+}
+
+.editDialog > .buttonContainer {
+    align-self: flex-end;
 }
 
 .hidden {
@@ -59,7 +124,7 @@
     .delDialog {
         background-color: black;
     }
-    .dialogBackground button {
+    .buttonContainer > button {
         background-color: gray;
     }
 }

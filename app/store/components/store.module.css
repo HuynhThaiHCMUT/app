@@ -48,27 +48,27 @@
     padding-bottom: 0.5rem;
 }
 
-.tableBody tr:nth-child(odd) {
+.tableBody > tr:nth-child(odd) {
     background-color: white;
     text-align: center;
 }
 
-.tableBody tr:nth-child(even) {
+.tableBody > tr:nth-child(even) {
     background-color: lightcyan;
     text-align: center;
 }
 
-.tableBody tr td button {
+.tableBody > tr > td button {
     background-color: transparent;
     border-width: 0rem;
     padding: 0.5rem;
 }
 
-.tableBody tr td button:hover {
+.tableBody > tr > td button:hover {
     color: red;
 }
 
-.tableBody tr td button:active {
+.tableBody > tr > td button:active {
     color: darkred;
 }
 
@@ -77,11 +77,11 @@
         background-color: #000137;
     }
     
-    .tableBody tr:nth-child(odd) {
+    .tableBody > tr:nth-child(odd) {
         background-color: rgb(27, 30, 45);
     }
     
-    .tableBody tr:nth-child(even) {
+    .tableBody > tr:nth-child(even) {
         background-color: black;
     }
 }
