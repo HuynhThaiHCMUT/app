@@ -36,9 +36,9 @@
     font-size: 1.25rem;
     border-radius: 0.25rem;
     width: 30rem;
+    padding: 0.25rem;
     background-color: transparent;
     border-style: solid;
-    padding: 0.25rem;
 }
 
 .editDialog > button:hover {
@@ -126,5 +126,58 @@
     }
     .buttonContainer > button {
         background-color: gray;
+    }
+}
+
+@media (max-width: 800px) {
+    .dialogBackground {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-height: 100vh;
+        min-width: 100vw;
+    }
+    
+    .editDialog {
+        position: absolute;
+        top: 0;
+        left: 0;
+        justify-content: flex-start;
+        min-height: 100vh;
+        min-width: 100vw;
+        font-size: 1rem;
+        border-radius: 0rem;
+    }
+    
+    .editDialog > input {
+        font-size: 1rem;
+        width: calc(100vw - 4rem);
+    }
+    
+    .editDialog > button {
+        font-size: 1rem;
+        width: calc(100vw - 4rem);
+    }
+    
+    .unitContainer input {
+        font-size: 1rem;
+        width: 4rem;
+    }
+    
+    .unitContainer > button {
+        font-size: 1rem;
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+    
+    .delDialog > h1 {
+        font-size: 1.5rem;
+    }
+
+    .buttonContainer > button {
+        font-size: 1rem;
     }
 }

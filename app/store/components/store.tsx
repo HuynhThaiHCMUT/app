@@ -8,7 +8,7 @@ import { AddDialog, DelDialog, EditDialog } from './dialog';
 import { Context } from '../contextProvider';
 
 export default function Store() {
-    const {q, setQ, data, setData, showAddDialog, setShowAddDialog, showEditDialog, setShowEditDialog, showDelDialog ,setShowDelDialog, selectedProduct, select} = useContext(Context);
+    const {q, setQ, data, setData, setShowAddDialog, setShowEditDialog, setShowDelDialog, selectedProduct, select, updated, update} = useContext(Context);
     useEffect(() => {
         async function getData() {
             let res = await fetch(`/database?q=${q}`, {cache: "no-store"});
@@ -17,7 +17,8 @@ export default function Store() {
             setData(products);
         };
         getData();
-    }, [q, showAddDialog, showEditDialog, showDelDialog]);
+        console.log(updated);
+    }, [q, updated]);
 
     const editItem = (p: ProductData) => {
         select(p);

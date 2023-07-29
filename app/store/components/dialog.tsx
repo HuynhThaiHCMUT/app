@@ -12,7 +12,7 @@ function parseInt(s: string): number {
 }
 
 function AddDialog() {
-    const {showAddDialog, setShowAddDialog} = useContext(Context);
+    const {showAddDialog, setShowAddDialog, updated, update} = useContext(Context);
 
     const [id, setId] = useState("");
     const [name, setName] = useState("");
@@ -36,6 +36,7 @@ function AddDialog() {
             let dbres: InsertOneResult = await res.json();
             if (dbres.acknowledged) {
                 console.log("Thêm sản phẩm thành công");
+                setTimeout(() => update(!updated), 1000);
             }
             else {
                 console.log("Thêm sản phẩm thất bại");
@@ -122,7 +123,7 @@ function AddDialog() {
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setTimeout(() => setShowAddDialog(false), 100)
+                    setShowAddDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowAddDialog(false)}>Huỷ</button>
             </div>
@@ -131,7 +132,7 @@ function AddDialog() {
 }
 
 function EditDialog({p}: {p: ProductData}) {
-    const {showEditDialog, setShowEditDialog} = useContext(Context);
+    const {showEditDialog, setShowEditDialog, updated, update} = useContext(Context);
 
     if (p == undefined) {
         p = {
@@ -172,6 +173,7 @@ function EditDialog({p}: {p: ProductData}) {
             let dbres: UpdateResult = await res.json();
             if (dbres.modifiedCount > 0) {
                 console.log("Sửa sản phẩm thành công");
+                update(!updated);
             }
             else {
                 console.log("Sửa sản phẩm thất bại");
@@ -261,7 +263,7 @@ function EditDialog({p}: {p: ProductData}) {
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setTimeout(() => setShowEditDialog(false), 100)
+                    setShowEditDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowEditDialog(false)}>Huỷ</button>
             </div>
@@ -270,7 +272,7 @@ function EditDialog({p}: {p: ProductData}) {
 }
 
 function DelDialog({p}: {p: ProductData}) {
-    const {showDelDialog, setShowDelDialog} = useContext(Context);
+    const {showDelDialog, setShowDelDialog, updated, update} = useContext(Context);
     const [confirmed, confirm] = useState(false);
     const firstRender = useRef(true);
 
@@ -291,6 +293,7 @@ function DelDialog({p}: {p: ProductData}) {
             let dbres: DeleteResult = await res.json();
             if (dbres.deletedCount > 0) {
                 console.log("Xoá sản phẩm thành công");
+                update(!updated);
             }
             else {
                 console.log("Xoá sản phẩm thất bại");
@@ -312,7 +315,7 @@ function DelDialog({p}: {p: ProductData}) {
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setTimeout(() => setShowDelDialog(false), 100)
+                    setShowDelDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowDelDialog(false)}>Huỷ</button>
             </div>

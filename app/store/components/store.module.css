@@ -58,7 +58,7 @@
     text-align: center;
 }
 
-.tableBody > tr > td button {
+.tableBody > tr > td > button {
     background-color: transparent;
     border-width: 0rem;
     padding: 0.5rem;
@@ -99,11 +99,11 @@
 }
 
 .price {
-    width: 6rem;
+    width: 5rem;
 }
 
 .basePrice {
-    width: 6rem;
+    width: 5rem;
 }
 
 .weight {
@@ -114,7 +114,7 @@
     width: 4rem;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 800px) {
     .id {
         display: none;
     }
@@ -132,5 +132,12 @@
     }
     .table tr td:nth-child(7) {
         display: none;
+    }
+    .action {
+        width: 1rem;
+    }
+    .tableBody > tr > td > button {
+        padding: 0rem;
+        padding-right: 0.5rem;
     }
 }

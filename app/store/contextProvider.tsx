@@ -9,6 +9,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showDelDialog, setShowDelDialog] = useState(false);
     const [selectedProduct, select] = useState<ProductData>();
+    const [updated, update] = useState(false);
 
     return (
     <Context.Provider value={
@@ -17,7 +18,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         showAddDialog, setShowAddDialog,
         showEditDialog, setShowEditDialog,
         showDelDialog, setShowDelDialog, 
-        selectedProduct, select }}>
+        selectedProduct, select,
+        updated, update}}>
         {children}
     </Context.Provider>
     );
