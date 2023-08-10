@@ -3,7 +3,7 @@
     max-height: 4rem;
     background: linear-gradient(to right, white, lightblue);
     display: grid;
-    grid-template-columns: 15% 25% 25% 25%;
+    grid-template-columns: 10% 20% 20% 20% 20%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,9 +29,15 @@
     white-space: nowrap;
 }
 
+.authButton {
+    background-color: transparent;
+    border-style: none;
+    font-size: 1.25rem;
+}
+
 @media (max-width: 1000px) {
     .headerBar {
-        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-columns: 20% 20% 20% 20% 20%;
     }
     .headerTab {
         justify-items: center;

@@ -11,7 +11,7 @@ export default function Store() {
     const {q, setQ, data, setData, setShowAddDialog, setShowEditDialog, setShowDelDialog, selectedProduct, select, updated, update} = useContext(Context);
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/database?q=${q}`, {cache: "no-store"});
+            let res = await fetch(`/api/database?q=${q}`, {cache: "no-store"});
             if (!res.ok) throw new Error("Failed to fetch data");
             let products = await res.json();
             setData(products);

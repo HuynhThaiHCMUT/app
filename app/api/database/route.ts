@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from './db';
-import { Filter, ObjectId } from 'mongodb';
+import { Filter, ObjectId} from 'mongodb';
 
 export async function GET(req: NextRequest) {
     const client = await clientPromise;

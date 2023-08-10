@@ -164,7 +164,7 @@
     
     .unitContainer input {
         font-size: 1rem;
-        width: 4rem;
+        width: calc((100vw - 10.5rem)/4);
     }
     
     .unitContainer > button {

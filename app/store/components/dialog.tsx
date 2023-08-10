@@ -31,7 +31,7 @@ function AddDialog() {
 
     useEffect(() => {
         async function addProduct(req: NewProductData) {
-            let res = await fetch(`database`, {method: "POST", body: JSON.stringify(req)});
+            let res = await fetch(`/api/database`, {method: "POST", body: JSON.stringify(req)});
             if (!res.ok) throw new Error("Failed to add product");
             let dbres: InsertOneResult = await res.json();
             if (dbres.acknowledged) {
@@ -168,7 +168,7 @@ function EditDialog({p}: {p: ProductData}) {
 
     useEffect(() => {
         async function editProduct(req: PutReqBody) {
-            let res = await fetch(`database`, {method: "PUT", body: JSON.stringify(req)});
+            let res = await fetch(`/api/database`, {method: "PUT", body: JSON.stringify(req)});
             if (!res.ok) throw new Error("Failed to edit product");
             let dbres: UpdateResult = await res.json();
             if (dbres.modifiedCount > 0) {
@@ -288,7 +288,7 @@ function DelDialog({p}: {p: ProductData}) {
 
     useEffect(() => {
         async function deleteProduct() {
-            let res = await fetch(`database?d=${p._id}`, {method: "DELETE"});
+            let res = await fetch(`/api/database?d=${p._id}`, {method: "DELETE"});
             if (!res.ok) throw new Error("Failed to delete product");
             let dbres: DeleteResult = await res.json();
             if (dbres.deletedCount > 0) {
