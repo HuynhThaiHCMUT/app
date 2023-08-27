@@ -20,13 +20,17 @@ function AddDialog() {
     const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
-    const firstRender = useRef(true);
 
     useEffect(() => {
         setId("");
         setName("");
         setQuantity("");
-        setUnits([]);
+        setUnits([{
+            name: "",
+            price: "",
+            basePrice: "",
+            weight: ""
+        }]);
     }, [showAddDialog])
 
     useEffect(() => {
@@ -42,7 +46,7 @@ function AddDialog() {
                 console.log("Thêm sản phẩm thất bại");
             }
         };
-        if (!firstRender.current && confirmed) {
+        if (confirmed) {
             let req: NewProductData = {
                 id: parseInt(id),
                 name: name,
@@ -59,14 +63,11 @@ function AddDialog() {
             addProduct(req);
             confirm(false);
         }
-        else {
-            firstRender.current = false;
-        }
     }, [confirmed]);
 
-    return <div className={showAddDialog ? styles.dialogBackground : styles.hidden} onClick={() => setShowAddDialog(false)}>
-        <div className={styles.editDialog} onClick={(e) => e.stopPropagation()}>
-            <h1>Thêm sản phẩm</h1>
+    return <div className={showAddDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowAddDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Thêm sản phẩm</h2>
             <p>ID</p>
             <input type='number'
             value={id}
@@ -108,9 +109,9 @@ function AddDialog() {
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
                         (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
                 </div>
-                <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                {(index != 0) ? <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button>
+                </button> : <></>}
             </div>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
@@ -131,32 +132,25 @@ function AddDialog() {
     </div>;
 }
 
-function EditDialog({p}: {p: ProductData}) {
-    const {showEditDialog, setShowEditDialog, updated, update} = useContext(Context);
-
-    if (p == undefined) {
-        p = {
-            _id: "",
-            id: 0,
-            name: "",
-            quantity: 0,
-            units: []
-        }
-    } 
-
+function EditDialog() {
+    const {selectedProduct, showEditDialog, setShowEditDialog, updated, update} = useContext(Context);
     const [id, setId] = useState("");
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("");
-    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
+    const [units, setUnits] = useState<UnconvertedUnit[]>([{
+        name: "",
+        price: "",
+        basePrice: "",
+        weight: ""
+    }]);
 
     const [confirmed, confirm] = useState(false);
-    const firstRender = useRef(true);
 
     useEffect(() => {
-        setId(p.id.toString());
-        setName(p.name);
-        setQuantity(p.quantity.toString());
-        setUnits(p.units.map((value) => {
+        setId(selectedProduct.id.toString());
+        setName(selectedProduct.name);
+        setQuantity(selectedProduct.quantity.toString());
+        setUnits(selectedProduct.units.map((value: Unit) => {
             return {
                 name: value.name,
                 price: value.price.toString(),
@@ -179,9 +173,9 @@ function EditDialog({p}: {p: ProductData}) {
                 console.log("Sửa sản phẩm thất bại");
             }
         };
-        if (!firstRender.current && confirmed) {
+        if (confirmed) {
             let req: PutReqBody = {
-                key: p._id,
+                key: selectedProduct._id,
                 body: {
                     id: parseInt(id),
                     name: name,
@@ -199,14 +193,11 @@ function EditDialog({p}: {p: ProductData}) {
             editProduct(req);
             confirm(false);
         }
-        else {
-            firstRender.current = false;
-        }
     }, [confirmed]);
 
-    return <div className={showEditDialog ? styles.dialogBackground : styles.hidden} onClick={() => setShowEditDialog(false)}>
-        <div className={styles.editDialog} onClick={(e) => e.stopPropagation()}>
-            <h1>Sửa sản phẩm</h1>
+    return <div className={showEditDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowEditDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Sửa sản phẩm</h2>
             <p>ID</p>
             <input type='number'
             value={id}
@@ -248,9 +239,9 @@ function EditDialog({p}: {p: ProductData}) {
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
                         (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
                 </div>
-                <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                {(index != 0) ? <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button>
+                </button> : <></>}
             </div>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
@@ -271,24 +262,13 @@ function EditDialog({p}: {p: ProductData}) {
     </div>;
 }
 
-function DelDialog({p}: {p: ProductData}) {
-    const {showDelDialog, setShowDelDialog, updated, update} = useContext(Context);
+function DelDialog() {
+    const {selectedProduct, showDelDialog, setShowDelDialog, updated, update} = useContext(Context);
     const [confirmed, confirm] = useState(false);
-    const firstRender = useRef(true);
-
-    if (p == undefined) {
-        p = {
-            _id: "",
-            id: 0,
-            name: "",
-            quantity: 0,
-            units: []
-        }
-    } 
 
     useEffect(() => {
         async function deleteProduct() {
-            let res = await fetch(`/api/database?d=${p._id}`, {method: "DELETE"});
+            let res = await fetch(`/api/database?d=${selectedProduct._id}`, {method: "DELETE"});
             if (!res.ok) throw new Error("Failed to delete product");
             let dbres: DeleteResult = await res.json();
             if (dbres.deletedCount > 0) {
@@ -299,19 +279,16 @@ function DelDialog({p}: {p: ProductData}) {
                 console.log("Xoá sản phẩm thất bại");
             }
         };
-        if (!firstRender.current && confirmed) {
+        if (confirmed) {
             deleteProduct();
             confirm(false);
         }
-        else {
-            firstRender.current = false;
-        }
     }, [confirmed]);
 
-    return <div className={showDelDialog ? styles.dialogBackground : styles.hidden} onClick={() => setShowDelDialog(false)}>
-        <div className={styles.delDialog} onClick={(e) => e.stopPropagation()}>
-            <h1>Xác nhận xoá sản phẩm ?</h1>
-            <p>{p.name}</p>
+    return <div className={showDelDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowDelDialog(false)}>
+        <div className={styles.delDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Xác nhận xoá sản phẩm ?</h2>
+            <p>{selectedProduct.name}</p>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);

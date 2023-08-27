@@ -1,0 +1,206 @@
+.sale {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.productList {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+}
+
+.invoice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+}
+
+.invoice > p {
+    font-size: 1.25rem;
+    padding: 0.25rem;
+    border: 0.1rem solid black;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.container {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+
+
+.searchBar {
+    flex: 1;
+    font-size: 1.25rem;
+    padding: 0.25rem;
+    width: 1rem;
+}
+
+.table {
+    table-layout: fixed;
+    border-spacing: 0;
+    flex: 1;
+}
+
+.productTableDiv {
+    display: flex;
+    max-height: calc(100vh - 8.5rem);
+    overflow: auto;
+}
+
+.invoiceTableDiv {
+    display: flex;
+    max-height: calc(100vh - 11rem);
+    overflow: auto;
+}
+
+.tableHeader th {
+    background-color: lightblue;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody > tr:nth-child(odd) {
+    background-color: white;
+    text-align: center;
+}
+
+.tableBody > tr:nth-child(even) {
+    background-color: lightcyan;
+    text-align: center;
+}
+
+.tableBody > tr > td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody > tr > td > button {
+    background-color: transparent;
+    border-width: 0rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.addButton:hover {
+    color: green;
+}
+
+.addButton:active {
+    color: darkgreen;
+}
+
+.actionButton:hover {
+    color: red;
+}
+
+.actionButton:active {
+    color: darkred;
+}
+
+.invoiceFooter {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.invoiceFooter > p {
+    flex: 1;
+}
+
+.invoiceFooter > button {
+    background-color: cornflowerblue;
+    color: white;
+    margin-left: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-size: 1rem;
+}
+
+.invoiceFooter > button:hover {
+    background-color: rgb(100, 100, 250);
+}
+
+.invoiceFooter > button:active {
+    background-color: rgb(51, 51, 192);
+}
+
+@media (prefers-color-scheme: dark) {
+    .invoice > p {
+        border-color: white;
+    }
+
+    .tableHeader th {
+        background-color: #000137;
+    }
+    
+    .tableBody > tr:nth-child(odd) {
+        background-color: rgb(27, 30, 45);
+    }
+    
+    .tableBody > tr:nth-child(even) {
+        background-color: black;
+    }
+}
+
+.quantity {
+    width: 5rem;
+}
+
+.unitName {
+    width: 4rem;
+}
+
+.price {
+    width: 4rem;
+}
+
+.total {
+    width: 5rem;
+}
+
+.add {
+    width: 2rem;
+}
+
+.action {
+    width: 4rem;
+}
+
+@media (max-width: 800px) {
+    .sale {
+        flex-direction: column;
+    }
+
+    .productTableDiv {
+        display: block;
+    }
+
+    .invoiceTableDiv {
+        display: block;
+    }
+
+    .action {
+        width: 2rem;
+    }
+
+    .productTableDiv {
+        max-height: calc((100vh - 15rem)/2);
+        min-height: calc((100vh - 15rem)/2);
+    }
+
+    .invoiceTableDiv {
+        max-height: calc((100vh - 15rem)/2);
+        min-height: calc((100vh - 15rem)/2);
+    }
+
+    .tableBody > tr > td > button {
+        padding: 0rem;
+        padding-right: 0.5rem;
+    }
+}

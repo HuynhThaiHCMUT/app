@@ -2,16 +2,18 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 0.5rem;
 }
 
 .container {
     display: flex;
+    margin-bottom: 1rem;
 }
 
 .container button {
     background-color: cornflowerblue;
     color: white;
-    margin: 0.5rem;
+    margin-left: 0.5rem;
     padding: 0rem 0.5rem 0rem 0.5rem;
     border-radius: 0.5rem;
     border: none;
@@ -28,18 +30,21 @@
 .searchBar {
     flex: 1;
     font-size: 1.25rem;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    height: 2.25rem;
+    padding: 0.25rem;
     width: 1rem;
 }
 
 .table {
-    margin: 0.5rem;
     table-layout: fixed;
     border-spacing: 0;
+    flex: 1;
 }
 
+.tableDiv {
+    display: flex;
+    max-height: calc(100vh - 8.5rem);
+    overflow: auto;
+}
 
 .tableHeader th {
     background-color: lightblue;
@@ -57,10 +62,16 @@
     text-align: center;
 }
 
+.tableBody > tr > td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
 .tableBody > tr > td > button {
     background-color: transparent;
     border-width: 0rem;
-    padding: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .tableBody > tr > td button:hover {
@@ -94,7 +105,7 @@
 }
 
 .unitName {
-    width: 6rem;
+    width: 4rem;
 }
 
 .price {

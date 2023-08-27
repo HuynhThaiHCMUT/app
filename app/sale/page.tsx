@@ -1,5 +1,10 @@
-import styles from './page.module.css'
+'use client'
 
-export default function Sale() {
-    return;
+import Sale from "./components/sale"
+import { ContextProvider } from "./contextProvider"
+
+export default function Page() {
+    return <ContextProvider>
+        <Sale/>
+    </ContextProvider>
 }

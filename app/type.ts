@@ -31,3 +31,10 @@ type PutReqBody = {
     key: string,
     body: NewProductData
 }
+
+type Invoice = {
+    product: ProductData,
+    quantity: number,
+    unit: Unit,
+    total: number
+}
