@@ -20,6 +20,7 @@ function AddDialog() {
     const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         setId("");
@@ -35,18 +36,20 @@ function AddDialog() {
 
     useEffect(() => {
         async function addProduct(req: NewProductData) {
-            let res = await fetch(`/api/database`, {method: "POST", body: JSON.stringify(req)});
+            let res = await fetch(`/api/product`, {method: "POST", body: JSON.stringify(req)});
             if (!res.ok) throw new Error("Failed to add product");
-            let dbres: InsertOneResult = await res.json();
-            if (dbres.acknowledged) {
-                console.log("Thêm sản phẩm thành công");
+            let dbres: ProductResponse = await res.json();
+            if (dbres.success) {
                 setTimeout(() => update(!updated), 1000);
+                setShowAddDialog(false);
+                setMessage("");
             }
             else {
-                console.log("Thêm sản phẩm thất bại");
+                setMessage(dbres.message);
             }
         };
         if (confirmed) {
+            
             let req: NewProductData = {
                 id: parseInt(id),
                 name: name,
@@ -68,6 +71,7 @@ function AddDialog() {
     return <div className={showAddDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowAddDialog(false)}>
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Thêm sản phẩm</h2>
+            <p className={styles.message}>{message}</p>
             <p>ID</p>
             <input type='number'
             value={id}
@@ -124,7 +128,6 @@ function AddDialog() {
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setShowAddDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowAddDialog(false)}>Huỷ</button>
             </div>
@@ -145,6 +148,7 @@ function EditDialog() {
     }]);
 
     const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         setId(selectedProduct.id.toString());
@@ -162,15 +166,16 @@ function EditDialog() {
 
     useEffect(() => {
         async function editProduct(req: PutReqBody) {
-            let res = await fetch(`/api/database`, {method: "PUT", body: JSON.stringify(req)});
+            let res = await fetch(`/api/product`, {method: "PUT", body: JSON.stringify(req)});
             if (!res.ok) throw new Error("Failed to edit product");
-            let dbres: UpdateResult = await res.json();
-            if (dbres.modifiedCount > 0) {
-                console.log("Sửa sản phẩm thành công");
+            let dbres: ProductResponse = await res.json();
+            if (dbres.success) {
                 update(!updated);
+                setShowEditDialog(false);
+                setMessage("");
             }
             else {
-                console.log("Sửa sản phẩm thất bại");
+                setMessage(dbres.message);
             }
         };
         if (confirmed) {
@@ -198,6 +203,7 @@ function EditDialog() {
     return <div className={showEditDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowEditDialog(false)}>
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Sửa sản phẩm</h2>
+            <p className={styles.message}>{message}</p>
             <p>ID</p>
             <input type='number'
             value={id}
@@ -254,7 +260,6 @@ function EditDialog() {
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setShowEditDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowEditDialog(false)}>Huỷ</button>
             </div>
@@ -265,18 +270,20 @@ function EditDialog() {
 function DelDialog() {
     const {selectedProduct, showDelDialog, setShowDelDialog, updated, update} = useContext(Context);
     const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         async function deleteProduct() {
-            let res = await fetch(`/api/database?d=${selectedProduct._id}`, {method: "DELETE"});
+            let res = await fetch(`/api/product?d=${selectedProduct._id}`, {method: "DELETE"});
             if (!res.ok) throw new Error("Failed to delete product");
-            let dbres: DeleteResult = await res.json();
-            if (dbres.deletedCount > 0) {
-                console.log("Xoá sản phẩm thành công");
+            let dbres: ProductResponse = await res.json();
+            if (dbres.success) {
                 update(!updated);
+                setShowDelDialog(false);
+                setMessage("");
             }
             else {
-                console.log("Xoá sản phẩm thất bại");
+                setMessage(dbres.message);
             }
         };
         if (confirmed) {
@@ -288,11 +295,11 @@ function DelDialog() {
     return <div className={showDelDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowDelDialog(false)}>
         <div className={styles.delDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Xác nhận xoá sản phẩm ?</h2>
+            <p className={styles.message}>{message}</p>
             <p>{selectedProduct.name}</p>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
-                    setShowDelDialog(false);
                 }}>Xác nhận</button>
                 <button onClick={() => setShowDelDialog(false)}>Huỷ</button>
             </div>

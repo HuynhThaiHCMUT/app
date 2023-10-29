@@ -116,6 +116,11 @@
     display: none;
 }
 
+.message {
+    color: red;
+    align-self: center;
+}
+
 @media (prefers-color-scheme: dark) {
     .editDialog {
         background-color: black;

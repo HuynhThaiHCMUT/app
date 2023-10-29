@@ -19,7 +19,7 @@ export default function Sale() {
 
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/api/database?q=${q}`, {cache: "no-store"});
+            let res = await fetch(`/api/product?q=${q}`, {cache: "no-store"});
             if (!res.ok) throw new Error("Failed to fetch data");
             let products = await res.json();
             setData(products);

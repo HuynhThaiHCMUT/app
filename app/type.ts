@@ -38,3 +38,8 @@ type Invoice = {
     unit: Unit,
     total: number
 }
+
+type ProductResponse = {
+    success: boolean,
+    message: string
+}

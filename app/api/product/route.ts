@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from './db';
+import clientPromise from '../db';
 import { Filter, ObjectId} from 'mongodb';
 
 export async function GET(req: NextRequest) {
@@ -23,20 +23,53 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
     const client = await clientPromise;
     const p = await req.json();
-    let res = await client.db("AppData").collection("ProductData").insertOne(p);
+    let data = await client.db("AppData").collection("ProductData").insertOne(p);
+    let res: ProductResponse;
+    if (data.acknowledged) {
+        res = {
+            success: true,
+            message: "Thêm sản phẩm thành công"
+        }
+    }
+    else res = {
+        success: false,
+        message: "Thêm sản phẩm thất bại"
+    }
     return NextResponse.json(res);
 }
 
 export async function PUT(req: NextRequest) {
     const client = await clientPromise;
     const reqBody = await req.json();
-    let res = await client.db("AppData").collection("ProductData").replaceOne({_id: new ObjectId(reqBody.key)}, reqBody.body);
+    let data = await client.db("AppData").collection("ProductData").replaceOne({_id: new ObjectId(reqBody.key)}, reqBody.body);
+    let res: ProductResponse;
+    if (data.modifiedCount > 0) {
+        res = {
+            success: true,
+            message: "Sửa sản phẩm thành công"
+        }
+    }
+    else res = {
+        success: false,
+        message: "Sửa sản phẩm thất bại"
+    }
     return NextResponse.json(res);
 }
 
 export async function DELETE(req: NextRequest) {
     const client = await clientPromise;
     const id = req.nextUrl.searchParams.get("d") ?? "";
-    let res = await client.db("AppData").collection("ProductData").deleteOne({_id: new ObjectId(id)});
+    let data = await client.db("AppData").collection("ProductData").deleteOne({_id: new ObjectId(id)});
+    let res: ProductResponse;
+    if (data.deletedCount > 0) {
+        res = {
+            success: true,
+            message: "Xoá sản phẩm thành công"
+        }
+    }
+    else res = {
+        success: false,
+        message: "Xoá sản phẩm thất bại"
+    }
     return NextResponse.json(res);
 }
