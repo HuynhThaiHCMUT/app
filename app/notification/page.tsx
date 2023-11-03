@@ -25,20 +25,20 @@ export default function Notification() {
             <div className={styles.panel}>
                 <h3>Danh sách vật phẩm sắp hết hạn</h3>
                 <div className={styles.container}>
-                {expiring.map((value) => <p>{value.name + " còn " + value.day + " này nữa hết hạn"}</p> )}
+                {expiring.map((value, index) => <p key={index}>{value.name + " còn " + value.day + " này nữa hết hạn"}</p> )}
                 </div>
             </div>
             <div className={styles.panel}>
                 <h3>Danh sách vật phẩm sắp hết hàng</h3>
                 <div className={styles.container}>
-                {shortage.map((value) => <p>{value.name + " sắp hết hàng, còn " + value.stock + " đơn vị hàng"}</p>)}
+                {shortage.map((value, index) => <p key={index}>{value.name + " sắp hết hàng, còn " + value.stock + " đơn vị hàng"}</p>)}
                 </div>
             </div>
         </div>
         <div className={styles.panel}>
             <h3>Danh sách báo cáo định kì</h3>
             <div className={styles.container}>
-                {report.map((value) => <p>{"Ngày: " + value.date + ", doanh thu: " + value.revenue + ", lợi nhuận: " + value.profit}</p>)}
+                {report.map((value, index) => <p key={index}>{"Ngày: " + value.date + ", doanh thu: " + value.revenue + ", lợi nhuận: " + value.profit}</p>)}
             </div>
         </div>
     </div>
