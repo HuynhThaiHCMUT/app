@@ -1,0 +1,45 @@
+.notification {
+    flex: 1;
+    display: flex;
+    margin: 1rem;
+    padding: 1rem;
+    border: 0.1rem cornflowerblue solid;
+    border-radius: 2rem;
+}
+
+.notify {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    align-items: center;
+    padding: 1rem;
+    margin: 0.25rem;
+    border-radius: 1rem;
+}
+
+.container {
+    flex: 1;
+    width: 100%;
+    background-color: lightcyan;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    line-height: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .panel {
+        background-color: #000120;
+    }
+    .container {
+        background-color: #000130;
+    }
+}

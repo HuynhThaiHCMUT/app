@@ -27,7 +27,7 @@ type NewProductData = {
     units: Unit[]
 }
 
-type PutReqBody = {
+type PutProductRequestBody = {
     key: string,
     body: NewProductData
 }
@@ -39,7 +39,37 @@ type Invoice = {
     total: number
 }
 
-type ProductResponse = {
+type Schedule = {
+    weekDay: string,
+    start: string,
+    end: string
+}
+
+type StaffData = {
+    _id: string,
+    id: number,
+    name: string,
+    role: string,
+    email: string,
+    phone: string,
+    schedule: Schedule[]
+}
+
+type NewStaffData = {
+    id: number,
+    name: string,
+    role: string,
+    email: string,
+    phone: string,
+    schedule: Schedule[]
+}
+
+type PutStaffRequestBody = {
+    key: string,
+    body: NewStaffData
+}
+
+type DatabaseResponse = {
     success: boolean,
     message: string
 }

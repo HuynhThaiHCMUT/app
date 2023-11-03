@@ -6,12 +6,6 @@
     grid-template-columns: 10% 20% 20% 20% 20%;
 }
 
-@media (prefers-color-scheme: dark) {
-    .headerBar {
-        background: linear-gradient(to bottom right, #000137, black);
-    }
-}
-
 .headerTab {
     min-height: 100%;
     align-items: center;
@@ -33,6 +27,29 @@
     background-color: transparent;
     border-style: none;
     font-size: 1.25rem;
+}
+
+.displayItem {
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: white;
+    width: 12rem;
+    height: 18rem;
+}
+
+.itemIcon {
+    font-size: 10rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .headerBar {
+        background: linear-gradient(to bottom right, #000137, black);
+    }
+    .displayItem {
+        border: 0.1rem solid lightblue;
+        background-color: #000120;
+    }
 }
 
 @media (max-width: 1000px) {

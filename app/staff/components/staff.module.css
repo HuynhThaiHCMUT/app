@@ -1,0 +1,149 @@
+.staff {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+}
+
+.container {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.container button {
+    background-color: cornflowerblue;
+    color: white;
+    margin-left: 0.5rem;
+    padding: 0rem 0.5rem 0rem 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.container button:hover {
+    background-color: rgb(100, 100, 250);
+}
+
+.container button:active {
+    background-color: rgb(51, 51, 192);
+}
+
+.searchBar {
+    flex: 1;
+    font-size: 1.25rem;
+    padding: 0.25rem;
+    width: 1rem;
+}
+
+.table {
+    table-layout: fixed;
+    border-spacing: 0;
+    flex: 1;
+}
+
+.tableDiv {
+    display: flex;
+    max-height: calc(100vh - 8.5rem);
+    overflow: auto;
+}
+
+.tableHeader th {
+    background-color: lightblue;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody > tr:nth-child(odd) {
+    background-color: white;
+    text-align: center;
+}
+
+.tableBody > tr:nth-child(even) {
+    background-color: lightcyan;
+    text-align: center;
+}
+
+.tableBody > tr > td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody > tr > td > button {
+    background-color: transparent;
+    border-width: 0rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.tableBody > tr > td button:hover {
+    color: red;
+}
+
+.tableBody > tr > td button:active {
+    color: darkred;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tableHeader th {
+        background-color: #000137;
+    }
+    
+    .tableBody > tr:nth-child(odd) {
+        background-color: rgb(27, 30, 45);
+    }
+    
+    .tableBody > tr:nth-child(even) {
+        background-color: black;
+    }
+}
+
+.id {
+    width: 9rem;
+}
+
+.role {
+    width: 6rem;
+}
+
+.email {
+    width: 9rem;
+}
+
+.phone {
+    width: 9rem;
+}
+
+.schedule {
+    width: 12rem;
+}
+
+.action {
+    width: 4rem;
+}
+
+@media (max-width: 800px) {
+    .id {
+        display: none;
+    }
+    .table tr td:nth-child(1) {
+        display: none;
+    }
+    .email {
+        display: none;
+    }
+    .table tr td:nth-child(4) {
+        display: none;
+    }
+    .phone {
+        display: none;
+    }
+    .table tr td:nth-child(5) {
+        display: none;
+    }
+    .action {
+        width: 1rem;
+    }
+    .tableBody > tr > td > button {
+        padding: 0rem;
+        padding-right: 0.5rem;
+    }
+}

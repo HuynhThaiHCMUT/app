@@ -16,24 +16,24 @@ export async function GET(req: NextRequest) {
             }
         }
     }]
-    let data = await client.db("AppData").collection("ProductData").aggregate(query).sort({name: 1}).toArray();
+    let data = await client.db("AppData").collection("StaffData").aggregate(query).sort({name: 1}).toArray();
     return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
     const client = await clientPromise;
     const p = await req.json();
-    let data = await client.db("AppData").collection("ProductData").insertOne(p);
+    let data = await client.db("AppData").collection("StaffData").insertOne(p);
     let res: DatabaseResponse;
     if (data.acknowledged) {
         res = {
             success: true,
-            message: "Thêm sản phẩm thành công"
+            message: "Thêm nhân viên thành công"
         }
     }
     else res = {
         success: false,
-        message: "Thêm sản phẩm thất bại"
+        message: "Thêm nhân viên thất bại"
     }
     return NextResponse.json(res);
 }
@@ -41,17 +41,17 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     const client = await clientPromise;
     const reqBody = await req.json();
-    let data = await client.db("AppData").collection("ProductData").replaceOne({_id: new ObjectId(reqBody.key)}, reqBody.body);
+    let data = await client.db("AppData").collection("StaffData").replaceOne({_id: new ObjectId(reqBody.key)}, reqBody.body);
     let res: DatabaseResponse;
     if (data.modifiedCount > 0) {
         res = {
             success: true,
-            message: "Sửa sản phẩm thành công"
+            message: "Sửa nhân viên thành công"
         }
     }
     else res = {
         success: false,
-        message: "Sửa sản phẩm thất bại"
+        message: "Sửa nhân viên thất bại"
     }
     return NextResponse.json(res);
 }
@@ -59,17 +59,17 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
     const client = await clientPromise;
     const id = req.nextUrl.searchParams.get("d") ?? "";
-    let data = await client.db("AppData").collection("ProductData").deleteOne({_id: new ObjectId(id)});
+    let data = await client.db("AppData").collection("StaffData").deleteOne({_id: new ObjectId(id)});
     let res: DatabaseResponse;
     if (data.deletedCount > 0) {
         res = {
             success: true,
-            message: "Xoá sản phẩm thành công"
+            message: "Xoá nhân viên thành công"
         }
     }
     else res = {
         success: false,
-        message: "Xoá sản phẩm thất bại"
+        message: "Xoá nhân viên thất bại"
     }
     return NextResponse.json(res);
 }
