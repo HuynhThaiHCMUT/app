@@ -1,37 +1,25 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState, createContext } from 'react';
 import styles from './page.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DisplayItem from './components/displayItem';
 import { faFilter, faX } from '@fortawesome/free-solid-svg-icons';
 
-const ToggleButton = ({ label }: {label: string}) => {
-    const [isToggled, setIsToggled] = useState(false);
-  
-    const toggleButton = () => {
-      setIsToggled(!isToggled);
-    };
-  
-    return (
-      <button
-        className={isToggled ? styles.activeBox : styles.filterBox}
-        onClick={toggleButton}
-      >
-        {label}
-      </button>
-    );
-  };
+const tags = ["Đồ uống", "Sữa", "Bánh", "Bột giặt", "Vệ sinh cá nhân", "Khác"];
+const sorts = ["Giá tăng", "Giá giảm"]
 
 export default function Home() {
     const [q, setQ] = useState("");
+    const [tag, setTag] = useState("");
+    const [sort, setSort] = useState("");
     const [data, setData] = useState<ProductData[]>([]);
     const [updated, update] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
 
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/api/product?q=${q}`, {cache: "no-store"});
+            let res = await fetch(`/api/product?q=${q}&tag=${tag}&sort=${sort}`, {cache: "no-store"});
             if (!res.ok) throw new Error("Failed to fetch data");
             let products = await res.json();
             setData(products);
@@ -39,7 +27,7 @@ export default function Home() {
         getData();
     }, [q, updated]);
 
-    return <div>
+    return  <div>
         <div className={showFilter ? styles.filterBackground : styles.hidden} onMouseDown={() => setShowFilter(false)}>
             <div className={styles.filterPanel} onMouseDown={(e) => e.stopPropagation()}>
                 <div className={styles.filterHeader}>
@@ -49,19 +37,19 @@ export default function Home() {
                 <div className={styles.filterSection}>
                     <h3>Phân loại sản phẩm</h3>
                     <div>
-                        <ToggleButton label="Đồ uống"/>
-                        <ToggleButton label="Sữa"/>
-                        <ToggleButton label="Bánh"/>
-                        <ToggleButton label="Bột giặt"/>
-                        <ToggleButton label="Vệ sinh cá nhân"/>
-                        <ToggleButton label="Khác"/>
+                        {tags.map((value, index) => 
+                        <button key={index}
+                            className={(tag == value) ? styles.activeBox : styles.filterBox}
+                            onClick={() => setTag(value)}>{value}</button>)}
                     </div>
                 </div>
                 <div className={styles.filterSection}>
                     <h3>Sắp xếp sản phẩm</h3>
                     <div>
-                        <ToggleButton label="Giá tăng"/>
-                        <ToggleButton label="Giá giảm"/>
+                    {sorts.map((value, index) => 
+                        <button key={index}
+                            className={(sort == value) ? styles.activeBox : styles.filterBox}
+                            onClick={() => setSort(value)}>{value}</button>)}
                     </div>
                 </div>
             </div>
@@ -80,5 +68,4 @@ export default function Home() {
         {data.map((value: ProductData) => <DisplayItem item={value} key={value._id}/>)}
         </div>
     </div>
-    
 }
