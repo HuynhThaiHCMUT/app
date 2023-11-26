@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useState, createContext } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DisplayItem from './components/displayItem';

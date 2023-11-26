@@ -40,6 +40,7 @@ export default function Notification() {
             <div className={styles.container}>
                 {report.map((value, index) => <p key={index}>{"Ngày: " + value.date + ", doanh thu: " + value.revenue + ", lợi nhuận: " + value.profit}</p>)}
             </div>
+            <LogoutButton/>
         </div>
     </div>
 }
