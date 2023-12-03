@@ -41,15 +41,17 @@ function AddDialog() {
     useEffect(() => {
         async function addStaff(req: NewStaffData) {
             let res = await fetch(`/api/staff`, {method: "POST", body: JSON.stringify(req)});
-            if (!res.ok) throw new Error("Failed to add staff");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                setTimeout(() => update(!updated), 1000);
-                setShowAddDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    setTimeout(() => update(!updated), 1000);
+                    setShowAddDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {
@@ -159,15 +161,17 @@ function EditDialog() {
     useEffect(() => {
         async function editStaff(req: PutStaffRequestBody) {
             let res = await fetch(`/api/staff`, {method: "PUT", body: JSON.stringify(req)});
-            if (!res.ok) throw new Error("Failed to edit staff");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                update(!updated);
-                setShowEditDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    update(!updated);
+                    setShowEditDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {
@@ -262,15 +266,17 @@ function DelDialog() {
     useEffect(() => {
         async function deleteStaff() {
             let res = await fetch(`/api/staff?d=${selectedStaff._id}`, {method: "DELETE"});
-            if (!res.ok) throw new Error("Failed to delete product");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                update(!updated);
-                setShowDelDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    update(!updated);
+                    setShowDelDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {

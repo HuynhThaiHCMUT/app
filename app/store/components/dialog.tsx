@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { DeleteResult, InsertOneResult, UpdateResult } from 'mongodb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '@/app/components/spinner';
 
 function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
@@ -37,19 +38,20 @@ function AddDialog() {
     useEffect(() => {
         async function addProduct(req: NewProductData) {
             let res = await fetch(`/api/product`, {method: "POST", body: JSON.stringify(req)});
-            if (!res.ok) throw new Error("Failed to add product");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                setTimeout(() => update(!updated), 1000);
-                setShowAddDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    setTimeout(() => update(!updated), 1000);
+                    setShowAddDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {
-            
             let req: NewProductData = {
                 id: parseInt(id),
                 name: name,
@@ -71,6 +73,7 @@ function AddDialog() {
     return <div className={showAddDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowAddDialog(false)}>
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Thêm sản phẩm</h2>
+            <Spinner/>
             <p className={styles.message}>{message}</p>
             <p>ID</p>
             <input type='number'
@@ -167,15 +170,17 @@ function EditDialog() {
     useEffect(() => {
         async function editProduct(req: PutProductRequestBody) {
             let res = await fetch(`/api/product`, {method: "PUT", body: JSON.stringify(req)});
-            if (!res.ok) throw new Error("Failed to edit product");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                update(!updated);
-                setShowEditDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    update(!updated);
+                    setShowEditDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {
@@ -275,15 +280,17 @@ function DelDialog() {
     useEffect(() => {
         async function deleteProduct() {
             let res = await fetch(`/api/product?d=${selectedProduct._id}`, {method: "DELETE"});
-            if (!res.ok) throw new Error("Failed to delete product");
-            let dbres: DatabaseResponse = await res.json();
-            if (dbres.success) {
-                update(!updated);
-                setShowDelDialog(false);
-                setMessage("");
-            }
+            if (!res.ok) setMessage("Internal server error")
             else {
-                setMessage(dbres.message);
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    update(!updated);
+                    setShowDelDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
             }
         };
         if (confirmed) {
