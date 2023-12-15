@@ -6,35 +6,26 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [q, setQ] = useState("");
     const [data, setData] = useState<ProductData[]>([]);
     const [selectedProduct, selectProduct] = useState<ProductData>({
-        _id: "",
         id: 0,
         name: "",
+        description: "",
         quantity: 0,
-        units: [{
-            name: "",
-            price: 0,
-            basePrice: 0,
-            weight: 0
-        }]
+        basePrice: 0,
+        status: ""
     });
     const [selectedInvoice, selectInvoice] = useState<Invoice>({
         product: {
-            _id: "",
             id: 0,
             name: "",
+            description: "",
             quantity: 0,
-            units: [{
-                name: "",
-                price: 0,
-                basePrice: 0,
-                weight: 0
-            }]
+            basePrice: 0,
+            status: ""
         },
         quantity: 0,
         unit: {
             name: "",
             price: 0,
-            basePrice: 0,
             weight: 0
         },
         total: 0

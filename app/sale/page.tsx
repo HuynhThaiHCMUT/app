@@ -5,6 +5,6 @@ import { ContextProvider } from "./contextProvider"
 
 export default function Page() {
     return <ContextProvider>
-        <Sale/>
+        <></>
     </ContextProvider>
 }

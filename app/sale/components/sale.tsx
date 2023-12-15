@@ -73,11 +73,11 @@ export default function Sale() {
                     </thead>
                     <tbody className={styles.tableBody}>
                         {data.map((value: ProductData) => 
-                        <tr key={value._id}>
+                        <tr key={value.id}>
                             <td>{value.name}</td>
                             <td>{value.quantity}</td>
-                            <td>{value.units.map((value, index) => <p key={index}>{value.name}</p>)}</td>
-                            <td>{value.units.map((value, index) => <p key={index}>{value.price}</p>)}</td>
+                            {/* <td>{value.units.map((value, index) => <p key={index}>{value.name}</p>)}</td>
+                            <td>{value.units.map((value, index) => <p key={index}>{value.price}</p>)}</td> */}
                             <td>
                                 <button className={styles.addButton} onClick={() => addInvoice(value)}>
                                     <FontAwesomeIcon icon={faPlus}/>
@@ -104,7 +104,7 @@ export default function Sale() {
                     </thead>
                     <tbody className={styles.tableBody}>
                         {invoice.map((value: Invoice) => 
-                        <tr key={value.product._id}>
+                        <tr key={value.product.id}>
                             <td>{value.product.name}</td>
                             <td>{value.quantity}</td>
                             <td>{value.unit.name}</td>
