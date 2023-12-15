@@ -27,6 +27,73 @@
     background-color: rgb(51, 51, 192);
 }
 
+.filterBackground {
+  background-color: #80808060;
+  position: absolute;
+  display: flex;
+  justify-content: right;
+  top: 0;
+  left: 0;
+  min-height: 100vh;
+  min-width: 100vw; 
+}
+
+.filterPanel {
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
+  background-color: white;
+}
+
+.filterHeader {
+  display: flex;
+  background-color: lightgray;
+  padding: 1rem;
+  height: 4rem;
+  justify-content: center;
+}
+
+.filterHeader > h2 {
+  flex: 1;
+}
+
+.filterHeader > button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+}
+
+.filterSection {
+  flex: 1;
+  padding: 1rem;
+}
+
+.filterSection > div {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.filterBox {
+  margin: 0.5rem;
+  padding: 1rem;
+  width: 10rem;
+  border: none;
+  background-color: #dcdcdc;
+}
+
+.activeBox {
+  margin: 0.5rem;
+  padding: 1rem;
+  width: 10rem;
+  border: none;
+  background-color: #a0a0a0;
+}
+
+.hidden {
+    display: none;
+}
+
 .searchBar {
     flex: 1;
     font-size: 1.25rem;
@@ -93,6 +160,18 @@
     
     .tableBody > tr:nth-child(even) {
         background-color: black;
+    }
+    .filterHeader {
+        background-color: black;
+    }
+    .filterPanel {
+    background-color: gray;
+    }
+    .filterBox {
+    background-color: #000120;
+    }
+    .activeBox {
+    background-color: #000550;
     }
 }
 

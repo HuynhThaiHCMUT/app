@@ -9,11 +9,12 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showDelDialog, setShowDelDialog] = useState(false);
     const [selectedProduct, select] = useState<ProductData>({
-        _id: "",
         id: 0,
         name: "",
+        description: "",
         quantity: 0,
-        units: []
+        status: "",
+        basePrice: 0
     });
     const [updated, update] = useState(false);
 

@@ -9,7 +9,7 @@ export default async function HeaderBar() {
         <HeaderTab href='/sale' icon={faCartShopping} text="Hoá đơn"/>
         <HeaderTab href='/store' icon={faShop} text="Kho hàng"/>
         <HeaderTab href='/staff' icon={faUser} text="Nhân viên"/>
-        <HeaderTab href='/notification' icon={faBell} text="Thông báo"/>
+        <HeaderTab href='/stats' icon={faBell} text="Thống kê"/>
         <HeaderTab href='/account' icon={faUserCircle} text="Tài khoản"/>
     </div>;
 }   

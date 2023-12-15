@@ -14,11 +14,17 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
-
     border-radius: 2rem;
     padding: 2rem;
+    max-height: 95vh;
+    overflow: scroll;
+}
+
+.editDialog > p {
+    max-width: 30rem;
+    text-wrap: wrap;
 }
 
 .editDialog > h2 {
@@ -38,6 +44,14 @@
     padding: 0.25rem;
     background-color: transparent;
     border-style: solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.editDialog > button > p {
+    margin-right: 0.25rem;
 }
 
 .editDialog > button:hover {
@@ -48,23 +62,39 @@
     color: darkgreen;
 }
 
-.unitContainer {
+.nameContainer {
     display: flex;
     flex-direction: row;
     margin-bottom: 1rem;
 }
 
-.unitContainer > div {
+.nameContainer :first-child {
     margin-right: 1rem;
 }
 
-.unitContainer input {
+.nameContainer input {
     font-size: 1rem;
-    width: 8.5rem;
+    width: 14.5rem;
     margin-bottom: 0rem;
 }
 
-.unitContainer > button {
+.scheduleContainer {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+}
+
+.scheduleContainer > div {
+    margin-right: 1rem;
+}
+
+.scheduleContainer input {
+    font-size: 1rem;
+    width: 13rem;
+    margin-bottom: 0rem;
+}
+
+.scheduleContainer > button {
     background-color: transparent;
     font-size: 1rem;
     height: 1.5rem;
@@ -74,11 +104,11 @@
     border-width: 0rem;
 }
 
-.unitContainer > button:hover {
+.scheduleContainer > button:hover {
     color: red;
 }
 
-.unitContainer > button:active {
+.scheduleContainer > button:active {
     color: darkred;
 }
 
@@ -121,6 +151,59 @@
     align-self: center;
 }
 
+.table {
+    table-layout: fixed;
+    border-spacing: 0;
+    flex: 1;
+}
+
+.tableDiv {
+    display: flex;
+    max-height: calc(100vh - 8.5rem);
+    overflow: auto;
+}
+
+.tableHeader th {
+    background-color: lightblue;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.tableBody > tr:nth-child(odd) {
+    background-color: white;
+    text-align: center;
+}
+
+.tableBody > tr:nth-child(even) {
+    background-color: lightcyan;
+    text-align: center;
+}
+
+.tableBody > tr > td {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.id {
+    width: 5rem;
+}
+
+.lname {
+    width: 10rem;
+}
+
+.fname {
+    width: 5rem;
+}
+
+.role {
+    width: 5rem;
+}
+
+.totalHours {
+    width: 5rem;
+}
+
 @media (prefers-color-scheme: dark) {
     .editDialog {
         background-color: black;
@@ -130,6 +213,18 @@
     }
     .buttonContainer > button {
         background-color: gray;
+    }
+
+    .tableHeader th {
+        background-color: #000137;
+    }
+    
+    .tableBody > tr:nth-child(odd) {
+        background-color: rgb(27, 30, 45);
+    }
+    
+    .tableBody > tr:nth-child(even) {
+        background-color: black;
     }
 }
 
@@ -185,3 +280,4 @@
         font-size: 1rem;
     }
 }
+

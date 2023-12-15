@@ -3,21 +3,28 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './staff.module.css'
 import { useContext, useEffect } from 'react';
-import { faPen, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { AddDialog, DelDialog, EditDialog } from './dialog';
+import { faCalendar, faPen, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { AddDialog, DelDialog, EditDialog, SumDialog, ViewDialog } from './dialog';
 import { Context } from '../contextProvider';
 
 export default function Staff() {
-    const {q, setQ, data, setData, setShowAddDialog, setShowEditDialog, setShowDelDialog, selectedStaff, select, updated, update} = useContext(Context);
+    const {q, setQ, data, setData, setShowSumDialog, setShowViewDialog, setShowAddDialog, setShowEditDialog, setShowDelDialog, selectedStaff, select, updated, update} = useContext(Context);
     useEffect(() => {
         async function getData() {
             let res = await fetch(`/api/staff?q=${q}`, {cache: "no-store"});
-            if (!res.ok) throw new Error("Failed to fetch data");
-            let staffs = await res.json();
-            setData(staffs);
+            if (res.ok) {
+                let staff = await res.json();
+                setData(staff);
+            }
+            else console.log("Failed to fetch data");
         };
         getData();
     }, [q, updated]);
+
+    function viewItem(p: StaffData) {
+        select(p);
+        setShowViewDialog(true);
+    }
 
     function editItem(p: StaffData) {
         select(p);
@@ -30,6 +37,8 @@ export default function Staff() {
     };
 
     return <div className={styles.staff}>
+        <SumDialog/>
+        <ViewDialog/>
         <AddDialog/>
         <EditDialog/>
         <DelDialog/>
@@ -39,33 +48,39 @@ export default function Staff() {
             type='search'
             value={q}
             onChange={(e) => {
-                setQ(e.target.value.replace(/[^A-Za-z0-9\s]/g, ""))
+                setQ(e.target.value)
             }}/>
-            <button onClick={() => setShowAddDialog(true)}>Thêm sản phẩm</button>
+            <button onClick={() => setShowAddDialog(true)}>Thêm nhân viên</button>
+            <button onClick={() => setShowSumDialog(true)}>Tổng giờ làm</button>
         </div>
         <div className={styles.tableDiv}>
             <table className={styles.table}>
                 <thead className={styles.tableHeader}>
                     <tr>
                         <th className={styles.id}>ID</th>
-                        <th className={styles.name}>Tên nhân viên</th>
+                        <th className={styles.lname}>Họ</th>
+                        <th className={styles.fname}>Tên</th>
                         <th className={styles.role}>Chức vụ</th>
                         <th className={styles.email}>Email</th>
                         <th className={styles.phone}>Số điện thoại</th>
-                        <th className={styles.schedule}>Ca làm việc</th>
+                        <th className={styles.birthday}>Ngày sinh</th>
                         <th className={styles.action}></th>
                     </tr>
                 </thead>
                 <tbody className={styles.tableBody}>
                     {data.map((value: StaffData) => 
-                    <tr key={value._id}>
+                    <tr key={value.id}>
                         <td>{value.id}</td>
-                        <td>{value.name}</td>
+                        <td>{value.lname}</td>
+                        <td>{value.fname}</td>
                         <td>{value.role}</td>
                         <td>{value.email}</td>
                         <td>{value.phone}</td>
-                        <td>{value.schedule.map((value, index) => <p key={index}>{value.weekDay + ": " + value.start + " - " + value.end}</p>)}</td>
+                        <td>{(new Date(Date.parse(value.birthday.toString()))).toLocaleDateString()}</td>
                         <td>
+                            <button onClick={() => viewItem(value)}>
+                                <FontAwesomeIcon icon={faCalendar}/>
+                            </button>
                             <button onClick={() => editItem(value)}>
                                 <FontAwesomeIcon icon={faPen}/>
                             </button>

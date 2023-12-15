@@ -1,4 +1,8 @@
 .home {
+  margin: 0.5rem;
+}
+
+.displayList {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
@@ -10,22 +14,24 @@
 
 .container {
   display: flex;
-  margin: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.container > button {
-  background-color: transparent;
+.container button {
+  background-color: cornflowerblue;
+  color: white;
+  margin-left: 0.5rem;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+  border-radius: 0.5rem;
   border: none;
-  font-size: 2rem;
-  margin: 0rem 1rem 0rem 1rem;
 }
 
-.container > button:hover {
-  color: rgb(100, 100, 250);
+.container button:hover {
+  background-color: rgb(100, 100, 250);
 }
 
-.container > button:active {
-  color: rgb(51, 51, 192);
+.container button:active {
+  background-color: rgb(51, 51, 192);
 }
 
 .searchBar {

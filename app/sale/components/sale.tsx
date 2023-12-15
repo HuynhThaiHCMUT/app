@@ -20,9 +20,11 @@ export default function Sale() {
     useEffect(() => {
         async function getData() {
             let res = await fetch(`/api/product?q=${q}`, {cache: "no-store"});
-            if (!res.ok) throw new Error("Failed to fetch data");
-            let products = await res.json();
-            setData(products);
+            if (res.ok) {
+                let products = await res.json();
+                setData(products);
+            }
+            else console.log("Failed to fetch data");
         };
         getData();
     }, [q, updated]);
@@ -55,7 +57,7 @@ export default function Sale() {
                 type='search'
                 value={q}
                 onChange={(e) => {
-                    setQ(e.target.value.replace(/[^A-Za-z0-9\s]/g, ""))
+                    setQ(e.target.value)
                 }}/>
             </div>
             <div className={styles.productTableDiv}>

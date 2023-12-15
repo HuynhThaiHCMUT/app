@@ -1,35 +1,27 @@
 type Unit = {
     name: string,
     price: number,
-    basePrice: number,
     weight: number
 }
 
 type UnconvertedUnit = {
     name: string,
     price: string,
-    basePrice: string,
     weight: string
 }
 
 type ProductData = {
-    _id: string,
     id: number,
     name: string,
+    description: string,
     quantity: number,
-    units: Unit[]
+    basePrice: number,
+    status: string,
 }
 
-type NewProductData = {
+type Category = {
     id: number,
-    name: string,
-    quantity: number,
-    units: Unit[]
-}
-
-type PutProductRequestBody = {
-    key: string,
-    body: NewProductData
+    name: string
 }
 
 type Invoice = {
@@ -40,33 +32,33 @@ type Invoice = {
 }
 
 type Schedule = {
-    weekDay: string,
-    start: string,
-    end: string
+    startHour: Date,
+    endHour: Date
 }
 
 type StaffData = {
-    _id: string,
     id: number,
-    name: string,
+    fname: string,
+    lname: string,
     role: string,
     email: string,
     phone: string,
-    schedule: Schedule[]
+    birthday: Date | string,
+    //schedule: Schedule[]
 }
 
-type NewStaffData = {
+type TotalWorkingHoursData = {
+    id: number,
+    fname: string,
+    lname: string,
+    role: string,
+    totalHours: number
+}
+
+type TopProductData = {
     id: number,
     name: string,
-    role: string,
-    email: string,
-    phone: string,
-    schedule: Schedule[]
-}
-
-type PutStaffRequestBody = {
-    key: string,
-    body: NewStaffData
+    totalSold: number
 }
 
 type DatabaseResponse = {

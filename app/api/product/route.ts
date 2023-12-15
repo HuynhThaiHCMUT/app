@@ -1,75 +1,106 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '../db';
-import { Filter, ObjectId} from 'mongodb';
+import { clientPromise, sql } from '../db';
 
 export async function GET(req: NextRequest) {
     const client = await clientPromise;
-    const q = req.nextUrl.searchParams.get("q")?.replace(/[^A-Za-z0-9\s]/g, "") ?? "";
-    let regex = `.*${q.split(" ").map((value) => `(.*${value}.*)`).join("&")}.*`;
-    const query: Filter<any>[] = [{
-        $search: {
-            index: "name",
-            regex: {
-                query: regex,
-                allowAnalyzedField: true,
-                path: "name"
-            }
+
+    if (req.nextUrl.searchParams.has("getCategory")) {
+        const data = (await client.query("SELECT cid AS id, name FROM Category"))[0];
+
+        return NextResponse.json(data);
+    }
+    else {
+        const query = req.nextUrl.searchParams.get("q") ?? "";
+        const category = req.nextUrl.searchParams.get("tag") ?? "";
+        const sort = req.nextUrl.searchParams.get("sort") ?? "";
+
+        let data: any[];
+        if (category == "Tất cả") {
+            data = (await client.execute("SELECT pid AS id, name, base_price AS basePrice, description, quantity, status FROM Product"))[0] as any[];
+        } else {
+            data = (await client.execute("CALL SearchProductsByCategory(?)", [category]))[0] as any[];
+            data = data[0];
         }
-    }]
-    let data = await client.db("AppData").collection("ProductData").aggregate(query).sort({name: 1}).toArray();
-    return NextResponse.json(data);
+        const filtered = data.filter((value) => (value.name.match(new RegExp(query, "i")) != null))
+        return NextResponse.json(filtered);
+    }
 }
 
 export async function POST(req: NextRequest) {
     const client = await clientPromise;
-    const p = await req.json();
-    let data = await client.db("AppData").collection("ProductData").insertOne(p);
-    let res: DatabaseResponse;
-    if (data.acknowledged) {
-        res = {
-            success: true,
-            message: "Thêm sản phẩm thành công"
-        }
+    const p: ProductData = await req.json();
+
+    try {
+        await client.execute("CALL InsertProduct(?, ?, ?, ?, ?, ?)", [p.id, p.name, p.description, p.quantity, p.status, p.basePrice]);
+    
+        const response: DatabaseResponse = {
+          success: true,
+          message: 'Successfully inserted data',
+        };
+    
+        return NextResponse.json(response);
+    } catch (error: any) {
+        // Log the entire error for debugging
+        console.error(error);
+
+        const response: DatabaseResponse = {
+            success: false,
+            message: error.sqlMessage,
+        };
+
+        return NextResponse.json(response);
     }
-    else res = {
-        success: false,
-        message: "Thêm sản phẩm thất bại"
-    }
-    return NextResponse.json(res);
 }
 
 export async function PUT(req: NextRequest) {
     const client = await clientPromise;
-    const reqBody = await req.json();
-    let data = await client.db("AppData").collection("ProductData").replaceOne({_id: new ObjectId(reqBody.key)}, reqBody.body);
-    let res: DatabaseResponse;
-    if (data.modifiedCount > 0) {
-        res = {
-            success: true,
-            message: "Sửa sản phẩm thành công"
-        }
+    const p: ProductData = await req.json();
+
+    try {
+        await client.execute("CALL UpdateProduct(?, ?, ?, ?, ?, ?)", [p.id, p.name, p.description, p.quantity, p.status, p.basePrice]);
+    
+        const response: DatabaseResponse = {
+          success: true,
+          message: 'Successfully updated data',
+        };
+    
+        return NextResponse.json(response);
+    } catch (error: any) {
+        // Log the entire error for debugging
+        console.error(error);
+
+        const response: DatabaseResponse = {
+            success: false,
+            message: error.sqlMessage,
+        };
+
+        return NextResponse.json(response);
     }
-    else res = {
-        success: false,
-        message: "Sửa sản phẩm thất bại"
-    }
-    return NextResponse.json(res);
 }
 
 export async function DELETE(req: NextRequest) {
     const client = await clientPromise;
     const id = req.nextUrl.searchParams.get("d") ?? "";
-    let data = await client.db("AppData").collection("ProductData").deleteOne({_id: new ObjectId(id)});
-    let res: DatabaseResponse;
-    if (data.deletedCount > 0) {
-        res = {
+
+    try {
+        // Delete an employee from the database
+        await client.execute("CALL DeleteProduct(?)", [parseInt(id)]);
+
+        const response: DatabaseResponse = {
             success: true,
-            message: "Xoá sản phẩm thành công"
-        }
+            message: 'Successfully deleted product',
+        };
+
+        return NextResponse.json(response);
+    } catch (error: any) {
+        // Log the entire error for debugging
+        console.error(error);
+
+        const response: DatabaseResponse = {
+            success: false,
+            message: error.sqlMessage,
+        };
+
+        return NextResponse.json(response);
     }
-    else res = {
-        success: false,
-        message: "Xoá sản phẩm thất bại"
-    }
-    return NextResponse.json(res);
 }

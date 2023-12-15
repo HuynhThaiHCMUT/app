@@ -97,27 +97,32 @@
 }
 
 .id {
-    width: 9rem;
+    width: 5rem;
+}
+
+
+.fname {
+    width: 15rem;
 }
 
 .role {
-    width: 6rem;
+    width: 5rem;
 }
 
 .email {
-    width: 9rem;
+    width: 15rem;
 }
 
 .phone {
-    width: 9rem;
+    width: 10rem;
 }
 
-.schedule {
-    width: 12rem;
+.birthday {
+    width: 10rem;
 }
 
 .action {
-    width: 4rem;
+    width: 6rem;
 }
 
 @media (max-width: 800px) {

@@ -1,2 +1,2 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '../db';
+import { clientPromise } from '../db';

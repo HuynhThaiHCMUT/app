@@ -3,43 +3,173 @@
 import styles from './dialog.module.css'
 import { Context } from '../contextProvider'
 import { useContext, useEffect, useState } from 'react'
-import { DeleteResult, InsertOneResult, UpdateResult } from 'mongodb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { setegid } from 'process';
+import FlatPickr from 'react-flatpickr'
+
+import 'flatpickr/dist/themes/light.css';
+import { type } from 'os';
 
 function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
 }
 
+function dateToISOString(date: Date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+}
+
+function SumDialog() {
+    const {showSumDialog, setShowSumDialog, updated, update} = useContext(Context);
+    const [start, setStart] = useState<Date | string>(new Date())
+    const [end, setEnd] = useState<Date | string>(new Date())
+    const [data, setData] = useState<TotalWorkingHoursData[]>([]);
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        async function getData() {
+            let res = await fetch(`/api/schedule?start=${start}&end=${end}`);
+            if (res.ok) {
+                let list = await res.json();
+
+                if (message in list) {
+                    setMessage(list.message);
+                } else {
+                    setData(list);
+                    console.log(list);
+                }
+            }
+            else console.log("Failed to fetch data");
+        };
+        getData();
+    }, [start, end]);
+
+    return <div className={showSumDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowSumDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Tính tổng giờ làm của nhân viên</h2>
+            <p className={styles.message}>{message}</p>
+            <div className={styles.scheduleContainer}>
+                <div>
+                    <p>Từ ngày</p>
+                    <FlatPickr
+                    value={start} 
+                    onChange={([date]) => setStart(dateToISOString(date))}/>
+                </div>
+                <div>
+                    <p>Đến ngày</p>
+                    <FlatPickr
+                    value={end} 
+                    onChange={([date]) => setEnd(dateToISOString(date))}/>
+                </div>
+            </div>
+            <div className={styles.tableDiv}>
+                <table className={styles.table}>
+                    <thead className={styles.tableHeader}>
+                        <tr>
+                            <th className={styles.id}>ID</th>
+                            <th className={styles.lname}>Họ</th>
+                            <th className={styles.fname}>Tên</th>
+                            <th className={styles.role}>Chức vụ</th>
+                            <th className={styles.totalHours}>Tổng giờ</th>
+                        </tr>
+                    </thead>
+                    <tbody className={styles.tableBody}>
+                        {data.map((value: TotalWorkingHoursData) => 
+                        <tr key={value.id}>
+                            <td>{value.id}</td>
+                            <td>{value.lname}</td>
+                            <td>{value.fname}</td>
+                            <td>{value.role}</td>
+                            <td>{value.totalHours}</td>
+                        </tr>)}
+                    </tbody>
+                </table>
+            </div>
+            <div className={styles.buttonContainer}>
+                <button onClick={() => setShowSumDialog(false)}>OK</button>
+            </div>
+        </div>
+    </div>;
+}
+
+function ViewDialog() {
+    const {showViewDialog, setShowViewDialog, updated, update, selectedStaff} = useContext(Context);
+    const [data, setData] = useState<Schedule[]>([]);
+
+    useEffect(() => {
+        async function getSchedule() {
+            let res = await fetch(`/api/schedule?id=${selectedStaff.id}`);
+            if (res.ok) {
+                let schedule = await res.json();
+                setData(schedule);
+            }
+            else console.log("Failed to fetch data");
+        };
+        getSchedule();
+    }, [showViewDialog]);
+
+    return <div className={showViewDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowViewDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Lịch làm việc của nhân viên</h2>
+            {data.map((value, index) => <div key={index} className={styles.scheduleContainer}>
+            <div>
+                <p>Bắt đầu</p>
+                <FlatPickr data-enable-time
+                value={value.startHour} 
+                /* onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))} *//>
+            </div>
+            <div>
+                <p>Kết thúc</p>
+                <FlatPickr data-enable-time
+                value={value.endHour} 
+                /* onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, endHour: date} : subValue))} *//>
+            </div>
+            {/* <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
+                <FontAwesomeIcon icon={faXmark}/>
+            </button> */}
+            </div>)}
+            {/* <button onClick={() => setSchedule([...schedule, {
+                startHourHour: new Date(),
+                endHour: new Date(),
+            }])}>
+                <p>Thêm lịch làm việc</p>
+                <FontAwesomeIcon icon={faPlus}/>
+            </button> */}
+            <div className={styles.buttonContainer}>
+                <button onClick={() => setShowViewDialog(false)}>OK</button>
+            </div>
+        </div>
+    </div>;
+}
+
 function AddDialog() {
     const {showAddDialog, setShowAddDialog, updated, update} = useContext(Context);
 
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
+    const [fname, setFName] = useState("");
+    const [lname, setLName] = useState("");
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [schedule, setSchedule] = useState<Schedule[]>([]);
+    const [birthday, setBirthday] = useState<Date | string>(new Date());
+    //const [schedule, setSchedule] = useState<Schedule[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        setId("");
-        setName("");
+        setMessage("");
+        setFName("");
+        setLName("");
         setRole("");
         setEmail("");
         setPhone("");
-        setSchedule([{
-            weekDay: "",
-            start: "",
-            end: ""
-        }]);
+        setBirthday(new Date());
+        //setSchedule([]);
     }, [showAddDialog])
 
     useEffect(() => {
-        async function addStaff(req: NewStaffData) {
+        async function addStaff(req: StaffData) {
             let res = await fetch(`/api/staff`, {method: "POST", body: JSON.stringify(req)});
             if (!res.ok) setMessage("Internal server error")
             else {
@@ -56,14 +186,16 @@ function AddDialog() {
         };
         if (confirmed) {
             
-            let req: NewStaffData = {
-                id: parseInt(id),
-                name: name,
+            let req: StaffData = {
+                id: 0,
+                fname: fname,
+                lname: lname,
                 role: role,
                 email: email,
                 phone: phone,
-                schedule: schedule,
-            } 
+                birthday: birthday,
+                //schedule: schedule,
+            }
             addStaff(req);
             confirm(false);
         }
@@ -73,14 +205,20 @@ function AddDialog() {
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Thêm nhân viên</h2>
             <p className={styles.message}>{message}</p>
-            <p>ID</p>
-            <input type='number'
-            value={id}
-            onChange={(e) => setId(e.target.value)}/>
-            <p>Tên nhân viên</p>
-            <input type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}/>
+            <div className={styles.nameContainer}>
+                <div>
+                    <p>Họ</p>
+                    <input type='text'
+                    value={fname}
+                    onChange={(e) => setFName(e.target.value)}/>
+                </div>
+                <div>
+                    <p>Tên</p>
+                    <input type='text'
+                    value={lname}
+                    onChange={(e) => setLName(e.target.value)}/>
+                </div>
+            </div>
             <p>Chức vụ</p>
             <input type='text'
             value={role}
@@ -90,42 +228,39 @@ function AddDialog() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}/>
             <p>Số điện thoại</p>
-            <input type='text'
+            <input type='number'
             value={phone}
             onChange={(e) => setPhone(e.target.value)}/>
-            {schedule.map((value, index) => <div key={index} className={styles.unitContainer}>
-                <div>
-                    <p>Thứ</p>
-                    <input type='text'
-                    value={value.weekDay}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, weekDay: e.target.value} : subValue))}/>
-                </div>
-                <div>
-                    <p>Bắt đầu</p>
-                    <input type='text'
-                    value={value.start}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, start: e.target.value} : subValue))}/>
-                </div>
-                <div>
-                    <p>Kết thúc</p>
-                    <input type='text'
-                    value={value.end}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, end: e.target.value} : subValue))}/>
-                </div>
-                {(index != 0) ? <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
-                    <FontAwesomeIcon icon={faXmark}/>
-                </button> : <></>}
+            <p>Ngày sinh</p>
+            <FlatPickr
+            value={birthday} 
+            onChange={([date]) => setBirthday(dateToISOString(date))}/>
+            {/* {schedule.map((value, index) => <div key={index} className={styles.scheduleContainer}>
+            <div>
+                <p>Bắt đầu</p>
+                <FlatPickr data-enable-time
+                value={value.startHourHour} 
+                onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))}/>
+            </div>
+            <div>
+                <p>Kết thúc</p>
+                <FlatPickr data-enable-time
+                value={value.endHour} 
+                onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
+            </div>
+            <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
+                <FontAwesomeIcon icon={faXmark}/>
+            </button>
             </div>)}
             <button onClick={() => setSchedule([...schedule, {
-                weekDay: "",
-                start: "",
-                end: "",
+                startHour: new Date(),
+                endHour: new Date(),
             }])}>
+                <p>Thêm lịch làm việc</p>
                 <FontAwesomeIcon icon={faPlus}/>
-            </button>
+            </button> */}
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -139,27 +274,30 @@ function AddDialog() {
 function EditDialog() {
     const {selectedStaff, showEditDialog, setShowEditDialog, updated, update} = useContext(Context);
 
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
+    const [fname, setFName] = useState("");
+    const [lname, setLName] = useState("");
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [schedule, setSchedule] = useState<Schedule[]>([]);
+    const [birthday, setBirthday] = useState<Date | string>(new Date());
+    //const [schedule, setSchedule] = useState<Schedule[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        setId(selectedStaff.id);
-        setName(selectedStaff.name);
+        setMessage("");
+        setFName(selectedStaff.fname);
+        setLName(selectedStaff.lname);
         setRole(selectedStaff.role);
         setEmail(selectedStaff.email);
         setPhone(selectedStaff.phone);
-        setSchedule(selectedStaff.schedule);
+        setBirthday(selectedStaff.birthday);
+        //setSchedule(selectedStaff.schedule);
     }, [showEditDialog])
 
     useEffect(() => {
-        async function editStaff(req: PutStaffRequestBody) {
+        async function editStaff(req: StaffData) {
             let res = await fetch(`/api/staff`, {method: "PUT", body: JSON.stringify(req)});
             if (!res.ok) setMessage("Internal server error")
             else {
@@ -175,17 +313,17 @@ function EditDialog() {
             }
         };
         if (confirmed) {
-            let req: PutStaffRequestBody = {
-                key: selectedStaff._id,
-                body: {
-                    id: parseInt(id),
-                    name: name,
-                    role: role,
-                    email: email,
-                    phone: phone,
-                    schedule: schedule,
-                }
-            } 
+            
+            let req: StaffData = {
+                id: selectedStaff.id,
+                fname: fname,
+                lname: lname,
+                role: role,
+                email: email,
+                phone: phone,
+                birthday: birthday,
+                //schedule: schedule,
+            }
             editStaff(req);
             confirm(false);
         }
@@ -195,14 +333,20 @@ function EditDialog() {
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Sửa nhân viên</h2>
             <p className={styles.message}>{message}</p>
-            <p>ID</p>
-            <input type='number'
-            value={id}
-            onChange={(e) => setId(e.target.value)}/>
-            <p>Tên nhân viên</p>
-            <input type='text'
-            value={name}
-            onChange={(e) => setName(e.target.value)}/>
+            <div className={styles.nameContainer}>
+                <div>
+                    <p>Họ</p>
+                    <input type='text'
+                    value={fname}
+                    onChange={(e) => setFName(e.target.value)}/>
+                </div>
+                <div>
+                    <p>Tên</p>
+                    <input type='text'
+                    value={lname}
+                    onChange={(e) => setLName(e.target.value)}/>
+                </div>
+            </div>
             <p>Chức vụ</p>
             <input type='text'
             value={role}
@@ -215,39 +359,34 @@ function EditDialog() {
             <input type='text'
             value={phone}
             onChange={(e) => setPhone(e.target.value)}/>
-            {schedule.map((value, index) => <div key={index} className={styles.unitContainer}>
-                <div>
-                    <p>Thứ</p>
-                    <input type='text'
-                    value={value.weekDay}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, weekDay: e.target.value} : subValue))}/>
-                </div>
+            <p>Ngày sinh</p>
+            <FlatPickr
+            value={birthday} 
+            onChange={([date]) => setBirthday(dateToISOString(date))}/>
+            {/* {schedule.map((value, index) => <div key={index} className={styles.scheduleContainer}>
                 <div>
                     <p>Bắt đầu</p>
-                    <input type='text'
-                    value={value.start}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, start: e.target.value} : subValue))}/>
+                    <FlatPickr value={value.startHour} 
+                    onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                        (index === subIndex) ? {...subValue, startHour: date} : subValue))}/>
                 </div>
                 <div>
                     <p>Kết thúc</p>
-                    <input type='text'
-                    value={value.end}
-                    onChange={(e) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, end: e.target.value} : subValue))}/>
+                    <FlatPickr value={value.endHour} 
+                    onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
+                        (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
                 </div>
-                {(index != 0) ? <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
+                <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button> : <></>}
+                </button>
             </div>)}
             <button onClick={() => setSchedule([...schedule, {
-                weekDay: "",
-                start: "",
-                end: "",
+                startHour: new Date(),
+                endHour: new Date(),
             }])}>
+                <p>Thêm lịch làm việc</p>
                 <FontAwesomeIcon icon={faPlus}/>
-            </button>
+            </button> */}
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -264,8 +403,12 @@ function DelDialog() {
     const [message, setMessage] = useState("");
 
     useEffect(() => {
+        setMessage("");
+    }, [showDelDialog])
+
+    useEffect(() => {
         async function deleteStaff() {
-            let res = await fetch(`/api/staff?d=${selectedStaff._id}`, {method: "DELETE"});
+            let res = await fetch(`/api/staff?d=${selectedStaff.id}`, {method: "DELETE"});
             if (!res.ok) setMessage("Internal server error")
             else {
                 let dbres: DatabaseResponse = await res.json();
@@ -300,4 +443,4 @@ function DelDialog() {
     </div>;
 }
 
-export {AddDialog, EditDialog, DelDialog};
+export {SumDialog, ViewDialog, AddDialog, EditDialog, DelDialog};

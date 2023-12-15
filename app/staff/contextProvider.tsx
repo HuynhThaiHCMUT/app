@@ -5,17 +5,19 @@ const Context = createContext<any | undefined>(undefined);
 const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [q, setQ] = useState("");
     const [data, setData] = useState<StaffData[]>([]);
+    const [showSumDialog, setShowSumDialog] = useState(false);
+    const [showViewDialog, setShowViewDialog] = useState(false);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [showDelDialog, setShowDelDialog] = useState(false);
     const [selectedStaff, select] = useState<StaffData>({
-        _id: "",
         id: 0,
-        name: "",
+        fname: "",
+        lname: "",
         role: "",
         email: "",
         phone: "",
-        schedule: []
+        birthday: new Date(Date.now())
     });
     const [updated, update] = useState(false);
 
@@ -23,6 +25,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     <Context.Provider value={
         { q, setQ, 
         data, setData, 
+        showSumDialog, setShowSumDialog,
+        showViewDialog, setShowViewDialog,
         showAddDialog, setShowAddDialog,
         showEditDialog, setShowEditDialog,
         showDelDialog, setShowDelDialog, 
