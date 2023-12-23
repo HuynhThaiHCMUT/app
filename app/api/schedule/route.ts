@@ -21,10 +21,8 @@ export async function GET(req: NextRequest) {
                 success: false,
                 message: error.sqlMessage,
             };
-
             return NextResponse.json(response);
         }
-        
     } else {
         const id = req.nextUrl.searchParams.get("id") ?? "-1";
         const data = (await client.execute("SELECT start_hour AS startHour, end_hour AS endHour FROM Working_schedule WHERE uid = ?", [parseInt(id)]))[0];

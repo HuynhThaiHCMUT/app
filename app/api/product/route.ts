@@ -21,7 +21,12 @@ export async function GET(req: NextRequest) {
             data = (await client.execute("CALL SearchProductsByCategory(?)", [category]))[0] as any[];
             data = data[0];
         }
-        const filtered = data.filter((value) => (value.name.match(new RegExp(query, "i")) != null))
+        let filtered = data.filter((value) => (value.name.match(new RegExp(query, "i")) != null))
+
+        let unitTable = (await client.execute("SELECT * FROM Unit"))[0] as any[];
+        filtered = filtered.map((value) => {
+            return {...value, units: unitTable.filter((unitValue) => unitValue.pid == value.id)};
+        })
         return NextResponse.json(filtered);
     }
 }

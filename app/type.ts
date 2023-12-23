@@ -17,6 +17,7 @@ type ProductData = {
     quantity: number,
     basePrice: number,
     status: string,
+    units: Unit[]
 }
 
 type Category = {

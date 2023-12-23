@@ -8,7 +8,6 @@ import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import FlatPickr from 'react-flatpickr'
 
 import 'flatpickr/dist/themes/light.css';
-import { type } from 'os';
 
 function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
@@ -115,29 +114,30 @@ function ViewDialog() {
                 <p>Bắt đầu</p>
                 <FlatPickr data-enable-time
                 value={value.startHour} 
-                /* onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))} *//>
+                onChange={([date]) => setData(data.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))}/>
             </div>
             <div>
                 <p>Kết thúc</p>
                 <FlatPickr data-enable-time
                 value={value.endHour} 
-                /* onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, endHour: date} : subValue))} *//>
+                onChange={([date]) => setData(data.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
             </div>
-            {/* <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
+            <button onClick={() => setData(data.filter((v, i) => (i != index)))}>
                 <FontAwesomeIcon icon={faXmark}/>
-            </button> */}
+            </button>
             </div>)}
-            {/* <button onClick={() => setSchedule([...schedule, {
-                startHourHour: new Date(),
+            <button onClick={() => setData([...data, {
+                startHour: new Date(),
                 endHour: new Date(),
             }])}>
                 <p>Thêm lịch làm việc</p>
                 <FontAwesomeIcon icon={faPlus}/>
-            </button> */}
+            </button>
             <div className={styles.buttonContainer}>
-                <button onClick={() => setShowViewDialog(false)}>OK</button>
+                <button onClick={() => setShowViewDialog(false)}>Xác nhận</button>
+                <button onClick={() => setShowViewDialog(false)}>Huỷ</button>
             </div>
         </div>
     </div>;
@@ -152,7 +152,6 @@ function AddDialog() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [birthday, setBirthday] = useState<Date | string>(new Date());
-    //const [schedule, setSchedule] = useState<Schedule[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -165,7 +164,6 @@ function AddDialog() {
         setEmail("");
         setPhone("");
         setBirthday(new Date());
-        //setSchedule([]);
     }, [showAddDialog])
 
     useEffect(() => {
@@ -194,7 +192,6 @@ function AddDialog() {
                 email: email,
                 phone: phone,
                 birthday: birthday,
-                //schedule: schedule,
             }
             addStaff(req);
             confirm(false);
@@ -235,32 +232,6 @@ function AddDialog() {
             <FlatPickr
             value={birthday} 
             onChange={([date]) => setBirthday(dateToISOString(date))}/>
-            {/* {schedule.map((value, index) => <div key={index} className={styles.scheduleContainer}>
-            <div>
-                <p>Bắt đầu</p>
-                <FlatPickr data-enable-time
-                value={value.startHourHour} 
-                onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))}/>
-            </div>
-            <div>
-                <p>Kết thúc</p>
-                <FlatPickr data-enable-time
-                value={value.endHour} 
-                onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
-            </div>
-            <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
-                <FontAwesomeIcon icon={faXmark}/>
-            </button>
-            </div>)}
-            <button onClick={() => setSchedule([...schedule, {
-                startHour: new Date(),
-                endHour: new Date(),
-            }])}>
-                <p>Thêm lịch làm việc</p>
-                <FontAwesomeIcon icon={faPlus}/>
-            </button> */}
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -280,7 +251,6 @@ function EditDialog() {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [birthday, setBirthday] = useState<Date | string>(new Date());
-    //const [schedule, setSchedule] = useState<Schedule[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -293,7 +263,6 @@ function EditDialog() {
         setEmail(selectedStaff.email);
         setPhone(selectedStaff.phone);
         setBirthday(selectedStaff.birthday);
-        //setSchedule(selectedStaff.schedule);
     }, [showEditDialog])
 
     useEffect(() => {
@@ -322,7 +291,6 @@ function EditDialog() {
                 email: email,
                 phone: phone,
                 birthday: birthday,
-                //schedule: schedule,
             }
             editStaff(req);
             confirm(false);
@@ -363,30 +331,6 @@ function EditDialog() {
             <FlatPickr
             value={birthday} 
             onChange={([date]) => setBirthday(dateToISOString(date))}/>
-            {/* {schedule.map((value, index) => <div key={index} className={styles.scheduleContainer}>
-                <div>
-                    <p>Bắt đầu</p>
-                    <FlatPickr value={value.startHour} 
-                    onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, startHour: date} : subValue))}/>
-                </div>
-                <div>
-                    <p>Kết thúc</p>
-                    <FlatPickr value={value.endHour} 
-                    onChange={([date]) => setSchedule(schedule.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
-                </div>
-                <button onClick={() => setSchedule(schedule.filter((v, i) => (i != index)))}>
-                    <FontAwesomeIcon icon={faXmark}/>
-                </button>
-            </div>)}
-            <button onClick={() => setSchedule([...schedule, {
-                startHour: new Date(),
-                endHour: new Date(),
-            }])}>
-                <p>Thêm lịch làm việc</p>
-                <FontAwesomeIcon icon={faPlus}/>
-            </button> */}
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);

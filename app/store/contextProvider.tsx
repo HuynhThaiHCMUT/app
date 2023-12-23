@@ -14,7 +14,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         description: "",
         quantity: 0,
         status: "",
-        basePrice: 0
+        basePrice: 0,
+        units: []
     });
     const [updated, update] = useState(false);
 

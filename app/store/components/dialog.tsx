@@ -18,6 +18,7 @@ function AddDialog() {
     const [desc, setDesc] = useState("");
     const [quantity, setQuantity] = useState("");
     const [basePrice, setBasePrice] = useState("");
+    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -28,6 +29,11 @@ function AddDialog() {
         setDesc("");
         setQuantity("");
         setBasePrice("");
+        setUnits([{
+            name: "",
+            price: "",
+            weight: ""
+        }]);
     }, [showAddDialog])
 
     useEffect(() => {
@@ -52,8 +58,15 @@ function AddDialog() {
                 name: name,
                 description: desc,
                 quantity: parseInt(quantity),
-                status: (parseInt(quantity) > 0) ? "Còn hàng" : "Hết hàng",
-                basePrice: parseInt(basePrice)
+                status: parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng",
+                basePrice: parseInt(basePrice),
+                units: units.map((value) => {
+                    return {
+                        name: value.name,
+                        price: parseInt(value.price),
+                        weight: parseInt(value.weight)
+                    }
+                })
             } 
             addProduct(req);
             confirm(false);
@@ -80,13 +93,12 @@ function AddDialog() {
             <input type='number'
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}/>
-            <p>Trạng thái: {parseInt(quantity) > 0 ? "Còn hàng" : "Hết hàng"} </p>
-            <p></p>
+            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
             <p>Giá gốc</p>
             <input type='number'
             value={basePrice}
             onChange={(e) => setBasePrice(e.target.value)}/>
-            {/* {units.map((value, index) => <div key={index} className={styles.unitContainer}>
+            {units.map((value, index) => <div key={index} className={styles.unitContainer}>
                 <div>
                     <p>Tên đơn vị</p>
                     <input type='text'
@@ -102,13 +114,6 @@ function AddDialog() {
                         (index === subIndex) ? {...subValue, price: e.target.value} : subValue))}/>
                 </div>
                 <div>
-                    <p>Giá gốc</p>
-                    <input type='number'
-                    value={value.basePrice}
-                    onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, basePrice: e.target.value} : subValue))}/>
-                </div>
-                <div>
                     <p>Trọng số</p>
                     <input type='number'
                     value={value.weight}
@@ -122,11 +127,10 @@ function AddDialog() {
             <button onClick={() => setUnits([...units, {
                 name: "",
                 price: "",
-                basePrice: "",
                 weight: ""
             }])}>
                 <FontAwesomeIcon icon={faPlus}/>
-            </button> */}
+            </button>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -145,7 +149,7 @@ function EditDialog() {
     const [desc, setDesc] = useState("");
     const [quantity, setQuantity] = useState("");
     const [basePrice, setBasePrice] = useState("");
-
+    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -156,14 +160,13 @@ function EditDialog() {
         setDesc(selectedProduct.description);
         setQuantity(selectedProduct.quantity.toString());
         setBasePrice(selectedProduct.basePrice.toString());
-        /* setUnits(selectedProduct.units.map((value: Unit) => {
+        setUnits(selectedProduct.units.map((value: Unit) => {
             return {
                 name: value.name,
                 price: value.price.toString(),
-                basePrice: value.basePrice.toString(),
                 weight: value.weight.toString()
             }
-        })); */
+        }));
     }, [showEditDialog])
 
     useEffect(() => {
@@ -188,16 +191,15 @@ function EditDialog() {
                 name: name,
                 description: desc,
                 quantity: parseInt(quantity),
-                status: (parseInt(quantity) > 0) ? "Còn hàng" : "Hết hàng",
-                basePrice: parseInt(basePrice)
-                /* units: units.map((value) => {
+                status: parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng",
+                basePrice: parseInt(basePrice),
+                units: units.map((value) => {
                     return {
                         name: value.name,
                         price: parseInt(value.price),
-                        basePrice: parseInt(value.basePrice),
                         weight: parseInt(value.weight)
                     }
-                }) */
+                })
             } 
             editProduct(req);
             confirm(false);
@@ -224,13 +226,12 @@ function EditDialog() {
             <input type='number'
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}/>
-            <p>Trạng thái: {parseInt(quantity) > 0 ? "Còn hàng" : "Hết hàng"} </p>
-            <p></p>
+            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
             <p>Giá gốc</p>
             <input type='number'
             value={basePrice}
             onChange={(e) => setBasePrice(e.target.value)}/>
-            {/* {units.map((value, index) => <div key={index} className={styles.unitContainer}>
+            {units.map((value, index) => <div key={index} className={styles.unitContainer}>
                 <div>
                     <p>Tên đơn vị</p>
                     <input type='text'
@@ -246,13 +247,6 @@ function EditDialog() {
                         (index === subIndex) ? {...subValue, price: e.target.value} : subValue))}/>
                 </div>
                 <div>
-                    <p>Giá gốc</p>
-                    <input type='number'
-                    value={value.basePrice}
-                    onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, basePrice: e.target.value} : subValue))}/>
-                </div>
-                <div>
                     <p>Trọng số</p>
                     <input type='number'
                     value={value.weight}
@@ -266,11 +260,10 @@ function EditDialog() {
             <button onClick={() => setUnits([...units, {
                 name: "",
                 price: "",
-                basePrice: "",
                 weight: ""
             }])}>
                 <FontAwesomeIcon icon={faPlus}/>
-            </button> */}
+            </button>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);

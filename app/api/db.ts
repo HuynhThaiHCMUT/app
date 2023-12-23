@@ -11,6 +11,6 @@ const config = {
   host: process.env.DB_HOST
 }
 
-let clientPromise = sql.createConnection(config);
+let clientPromise = sql.createPool(config);
 
 export {clientPromise, sql};
