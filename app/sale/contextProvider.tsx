@@ -11,7 +11,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         description: "",
         quantity: 0,
         basePrice: 0,
-        status: ""
+        status: "",
+        units: []
     });
     const [selectedInvoice, selectInvoice] = useState<Invoice>({
         product: {
@@ -20,7 +21,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
             description: "",
             quantity: 0,
             basePrice: 0,
-            status: ""
+            status: "",
+            units: []
         },
         quantity: 0,
         unit: {

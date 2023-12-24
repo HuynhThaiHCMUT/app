@@ -76,7 +76,7 @@ export default function Staff() {
                         <td>{value.role}</td>
                         <td>{value.email}</td>
                         <td>{value.phone}</td>
-                        <td>{(new Date(Date.parse(value.birthday.toString()))).toLocaleDateString()}</td>
+                        <td>{(new Date(value.birthday.toString())).toLocaleDateString()}</td>
                         <td>
                             <button onClick={() => viewItem(value)}>
                                 <FontAwesomeIcon icon={faCalendar}/>

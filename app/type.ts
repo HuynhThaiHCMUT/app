@@ -33,8 +33,16 @@ type Invoice = {
 }
 
 type Schedule = {
+    id: number,
     startHour: Date,
-    endHour: Date
+    endHour: Date,
+    changed?: boolean,
+    deleted?: boolean
+}
+
+type ScheduleRequest = {
+    id: number,
+    schedule: Schedule[]
 }
 
 type StaffData = {

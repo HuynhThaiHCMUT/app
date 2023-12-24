@@ -25,90 +25,43 @@ export async function GET(req: NextRequest) {
         }
     } else {
         const id = req.nextUrl.searchParams.get("id") ?? "-1";
-        const data = (await client.execute("SELECT start_hour AS startHour, end_hour AS endHour FROM Working_schedule WHERE uid = ?", [parseInt(id)]))[0];
+        const data = (await client.execute("SELECT wid AS id, start_hour AS startHour, end_hour AS endHour FROM Working_schedule WHERE uid = ?", [parseInt(id)]))[0];
         return NextResponse.json(data);
     }
 }
 
 export async function POST(req: NextRequest) {
     const client = await clientPromise;
-
-    //TODO: Insert new employee to database
+    const schedule: ScheduleRequest = await req.json();
 
     try {
-        await client.execute("")
+        for (const s of schedule.schedule) {
+            if (s.deleted && s.id == -1) continue;
+            if (s.deleted) {
+                await client.execute("CALL DeleteSchedule(?)", [s.id]);
+            } else {
+                if (s.id == -1) {
+                    await client.execute("CALL InsertSchedule(?, ?, ?)", [schedule.id, new Date(s.startHour), new Date(s.endHour)]);
+                } else {
+                    await client.execute("CALL UpdateSchedule(?, ?, ?)", [s.id, new Date(s.startHour), new Date(s.endHour)]);
+                }
+            }
+        }
     
         const response: DatabaseResponse = {
           success: true,
-          message: '',
+          message: 'Update successfully',
         };
     
         return NextResponse.json(response);
     } catch (error: any) {
-        let errorMessage = 'Insert failed. ';
         console.error(error);
     
         const response: DatabaseResponse = {
             success: false,
-            message: errorMessage,
+            message: error.sqlMessage,
         };
     
-        return NextResponse.json(response);
-    }
-}
-
-export async function PUT(req: NextRequest) {
-    const client = await clientPromise;
-    const staff: StaffData = await req.json();
-
-    try {
-        await client.execute("")
-
-        const response: DatabaseResponse = {
-            success: true,
-            message: '',
-        };
-
-        return NextResponse.json(response);
-    } catch (error: any) {
-        let errorMessage = 'Update failed. ';
-
-        // Log the entire error for debugging
-        console.error(error);
-
-        const response: DatabaseResponse = {
-            success: false,
-            message: errorMessage,
-        };
-
-        return NextResponse.json(response);
-    }
-}
-
-export async function DELETE(req: NextRequest) {
-    const client = await clientPromise;
-
-    try {
-        // Delete an employee from the database
-        await client.execute("");
-
-        const response: DatabaseResponse = {
-            success: true,
-            message: '',
-        };
-
-        return NextResponse.json(response);
-    } catch (error: any) {
-        let errorMessage = 'Delete failed. ';
-
-        // Log the entire error for debugging
-        console.error(error);
-
-        const response: DatabaseResponse = {
-            success: false,
-            message: errorMessage,
-        };
-
         return NextResponse.json(response);
     }
 }

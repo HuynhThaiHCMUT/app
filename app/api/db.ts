@@ -8,9 +8,10 @@ const config = {
   user: process.env.DB_USER,
   password: process.env.DB_PWD,
   database: process.env.DB_NAME,
-  host: process.env.DB_HOST
+  host: process.env.DB_HOST,
+  connectionLimit: 3
 }
 
-let clientPromise = sql.createPool(config);
+let clientPromise = sql.createConnection(config);
 
 export {clientPromise, sql};

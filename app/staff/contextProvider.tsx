@@ -17,7 +17,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         role: "",
         email: "",
         phone: "",
-        birthday: new Date(Date.now())
+        birthday: new Date()
     });
     const [updated, update] = useState(false);
 

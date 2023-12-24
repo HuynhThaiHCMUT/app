@@ -13,20 +13,16 @@ function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
 }
 
-function dateToISOString(date: Date) {
-    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
-}
-
 function SumDialog() {
     const {showSumDialog, setShowSumDialog, updated, update} = useContext(Context);
-    const [start, setStart] = useState<Date | string>(new Date())
-    const [end, setEnd] = useState<Date | string>(new Date())
+    const [start, setStart] = useState<Date>(new Date())
+    const [end, setEnd] = useState<Date>(new Date())
     const [data, setData] = useState<TotalWorkingHoursData[]>([]);
     const [message, setMessage] = useState("");
 
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/api/schedule?start=${start}&end=${end}`);
+            let res = await fetch(`/api/schedule?start=${start}&end=${end}`, {cache: "no-store"});
             if (res.ok) {
                 let list = await res.json();
 
@@ -51,13 +47,13 @@ function SumDialog() {
                     <p>Từ ngày</p>
                     <FlatPickr
                     value={start} 
-                    onChange={([date]) => setStart(dateToISOString(date))}/>
+                    onChange={([date]) => setStart(date)}/>
                 </div>
                 <div>
                     <p>Đến ngày</p>
                     <FlatPickr
                     value={end} 
-                    onChange={([date]) => setEnd(dateToISOString(date))}/>
+                    onChange={([date]) => setEnd(date)}/>
                 </div>
             </div>
             <div className={styles.tableDiv}>
@@ -93,50 +89,84 @@ function SumDialog() {
 function ViewDialog() {
     const {showViewDialog, setShowViewDialog, updated, update, selectedStaff} = useContext(Context);
     const [data, setData] = useState<Schedule[]>([]);
+    const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         async function getSchedule() {
-            let res = await fetch(`/api/schedule?id=${selectedStaff.id}`);
+            let res = await fetch(`/api/schedule?id=${selectedStaff.id}`, {cache: "no-store"});
             if (res.ok) {
                 let schedule = await res.json();
                 setData(schedule);
             }
             else console.log("Failed to fetch data");
         };
+        setMessage("");
         getSchedule();
     }, [showViewDialog]);
+
+    useEffect(() => {
+        async function postSchedule(changedSchedule: ScheduleRequest) {
+            let res = await fetch(`/api/schedule`, {method: "POST", body: JSON.stringify(changedSchedule)});
+            if (res.ok) {
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    setTimeout(() => update(!updated), 1000);
+                    setShowViewDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
+            }
+            else setMessage("Internal server error");
+        };
+        if (confirmed) {
+            let changedSchedule = {
+                id: selectedStaff.id,
+                schedule: data.filter((value) => value.changed)
+            }
+
+            postSchedule(changedSchedule);
+            confirm(false);
+        } 
+    }, [confirmed]);
 
     return <div className={showViewDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowViewDialog(false)}>
         <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
             <h2>Lịch làm việc của nhân viên</h2>
-            {data.map((value, index) => <div key={index} className={styles.scheduleContainer}>
+            <p className={styles.message}>{message}</p>
+            {data.map((value, index) => (!value.deleted) ? <div key={index} className={styles.scheduleContainer}>
             <div>
                 <p>Bắt đầu</p>
                 <FlatPickr data-enable-time
                 value={value.startHour} 
                 onChange={([date]) => setData(data.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, startHourHour: date} : subValue))}/>
+                    (index === subIndex) ? {...subValue, startHour: date, changed: true} : subValue))}/>
             </div>
             <div>
                 <p>Kết thúc</p>
                 <FlatPickr data-enable-time
                 value={value.endHour} 
                 onChange={([date]) => setData(data.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, endHour: date} : subValue))}/>
+                    (index === subIndex) ? {...subValue, endHour: date, changed: true} : subValue))}/>
             </div>
-            <button onClick={() => setData(data.filter((v, i) => (i != index)))}>
+            <button onClick={() => setData(data.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, changed: true, deleted: true} : subValue))}>
                 <FontAwesomeIcon icon={faXmark}/>
             </button>
-            </div>)}
+            </div> : <></>)}
             <button onClick={() => setData([...data, {
+                id: -1,
                 startHour: new Date(),
                 endHour: new Date(),
+                changed: true
             }])}>
                 <p>Thêm lịch làm việc</p>
                 <FontAwesomeIcon icon={faPlus}/>
             </button>
             <div className={styles.buttonContainer}>
-                <button onClick={() => setShowViewDialog(false)}>Xác nhận</button>
+                <button onClick={() => confirm(true)}>Xác nhận</button>
                 <button onClick={() => setShowViewDialog(false)}>Huỷ</button>
             </div>
         </div>
@@ -151,7 +181,7 @@ function AddDialog() {
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [birthday, setBirthday] = useState<Date | string>(new Date());
+    const [birthday, setBirthday] = useState<Date>(new Date());
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -231,7 +261,7 @@ function AddDialog() {
             <p>Ngày sinh</p>
             <FlatPickr
             value={birthday} 
-            onChange={([date]) => setBirthday(dateToISOString(date))}/>
+            onChange={([date]) => setBirthday(date)}/>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -250,7 +280,7 @@ function EditDialog() {
     const [role, setRole] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [birthday, setBirthday] = useState<Date | string>(new Date());
+    const [birthday, setBirthday] = useState<Date>(new Date());
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -330,7 +360,7 @@ function EditDialog() {
             <p>Ngày sinh</p>
             <FlatPickr
             value={birthday} 
-            onChange={([date]) => setBirthday(dateToISOString(date))}/>
+            onChange={([date]) => setBirthday(date)}/>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
