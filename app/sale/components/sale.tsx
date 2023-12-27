@@ -5,7 +5,7 @@ import { useContext, useEffect } from 'react';
 import { Context } from '../contextProvider'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { AddDialog, EditDialog } from './dialog';
+import { AddDialog, ConfirmDialog, EditDialog } from './dialog';
 
 export default function Sale() {
     const { q, setQ, 
@@ -15,7 +15,7 @@ export default function Sale() {
         updated, update, 
         invoice, setInvoice,
         total, setTotal,
-        setShowAddDialog, setShowEditDialog, setShowDelDialog } = useContext(Context);
+        setShowAddDialog, setShowEditDialog, setShowConfirmDialog } = useContext(Context);
 
     useEffect(() => {
         async function getData() {
@@ -50,6 +50,7 @@ export default function Sale() {
     return <div className={styles.sale}>
         <AddDialog/>
         <EditDialog/>
+        <ConfirmDialog/>
         <div className={styles.productList}>
             <div className={styles.container}>
                 <input className={styles.searchBar} 
@@ -76,8 +77,8 @@ export default function Sale() {
                         <tr key={value.id}>
                             <td>{value.name}</td>
                             <td>{value.quantity}</td>
-                            {/* <td>{value.units.map((value, index) => <p key={index}>{value.name}</p>)}</td>
-                            <td>{value.units.map((value, index) => <p key={index}>{value.price}</p>)}</td> */}
+                            <td>{value.units.map((value, index) => <p key={index}>{value.name}</p>)}</td>
+                            <td>{value.units.map((value, index) => <p key={index}>{value.price}</p>)}</td>
                             <td>
                                 <button className={styles.addButton} onClick={() => addInvoice(value)}>
                                     <FontAwesomeIcon icon={faPlus}/>
@@ -125,8 +126,7 @@ export default function Sale() {
             <div className={styles.invoiceFooter}>
                 <p>{`Tổng cộng: ${total}`}</p>
                 <button onClick={() => {
-                    setInvoice([]);
-                    setTotal(0);
+                    if (total > 0) setShowConfirmDialog(true);
                 }}>Thanh toán</button>
                 <button onClick={() => {
                     setInvoice([]);

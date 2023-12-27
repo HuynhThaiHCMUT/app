@@ -18,7 +18,7 @@
     align-items: flex-start;
 
     border-radius: 2rem;
-    padding: 2rem;
+    padding: 2rem 4rem 2rem 4rem;
 }
 
 .editDialog > div {
@@ -27,7 +27,7 @@
 }
 
 .editDialog > div > div {
-    margin-right: 1rem;
+    margin-right: 2rem;
     margin-top: 1rem;
 }
 
@@ -115,6 +115,11 @@
 
 .editDialog > .buttonContainer {
     align-self: flex-end;
+}
+
+.message {
+    color: red;
+    align-self: center;
 }
 
 .hidden {

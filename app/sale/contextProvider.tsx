@@ -37,7 +37,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [total, setTotal] = useState(0);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
-    const [showDelDialog, setShowDelDialog] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
     return (
     <Context.Provider value={
@@ -50,7 +50,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         total, setTotal,
         showAddDialog, setShowAddDialog,
         showEditDialog, setShowEditDialog,
-        showDelDialog, setShowDelDialog }}>
+        showConfirmDialog, setShowConfirmDialog }}>
         {children}
     </Context.Provider>
     );

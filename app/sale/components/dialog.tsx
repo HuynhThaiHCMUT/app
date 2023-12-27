@@ -2,7 +2,7 @@
 
 import styles from './dialog.module.css'
 import { Context } from '../contextProvider'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { use, useContext, useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -115,4 +115,51 @@ function EditDialog() {
     </div>;
 }
 
-export {AddDialog, EditDialog};
+function ConfirmDialog() {
+    const {showConfirmDialog, setShowConfirmDialog, invoice, setInvoice, total, setTotal} = useContext(Context);
+    const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        setMessage("");
+    }, [showConfirmDialog])
+
+    useEffect(() => {
+        async function postInvoice(req: Invoice[]) {
+            let res = await fetch(`/api/sale`, {method: "POST", body: JSON.stringify(req)});
+            if (!res.ok) setMessage("Internal server error")
+            else {
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    setInvoice([]);
+                    setTotal(0);
+                    setShowConfirmDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
+            }
+        };
+        if (confirmed) {
+            postInvoice(invoice);
+            confirm(false);
+        }
+    }, [confirmed]);
+
+    return <div className={showConfirmDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowConfirmDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Xác nhận thanh toán?</h2>
+            <p className={styles.message}>{message}</p>
+            <p>{`Tổng cộng: ${total}`}</p>
+            <div className={styles.buttonContainer}>
+                <button onClick={() => {
+                    confirm(true);
+                }}>Xác nhận</button>
+                <button onClick={() => setShowConfirmDialog(false)}>Huỷ</button>
+            </div>
+        </div>
+    </div>;
+}
+
+export {AddDialog, EditDialog, ConfirmDialog};
