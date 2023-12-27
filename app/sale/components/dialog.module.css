@@ -19,6 +19,7 @@
 
     border-radius: 2rem;
     padding: 2rem 4rem 2rem 4rem;
+    font-weight: bold;
 }
 
 .editDialog > div {
@@ -33,11 +34,38 @@
 
 .editDialog input {
     font-size: 1rem;
+    margin-bottom: 1rem;
     width: 5rem;
+    border-radius: 40px;
+    min-height: 4vh;
+    padding: 10px 15px;
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    margin-top: 8px;
+    box-shadow: 0 0 2px darkslategray;
+}
+
+.editDialog input::-webkit-outer-spin-button,
+.editDialog input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.editDialog input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .editDialog select {
     font-size: 1rem;
+    margin-bottom: 1rem;
+    width: 10rem;
+    border-radius: 40px;
+    min-height: 4vh;
+    padding: 10px 15px;
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    margin-top: 8px;
+    box-shadow: 0 0 2px darkslategray;
 }
 
 .editDialog > h2 {
@@ -108,9 +136,14 @@
 
 .buttonContainer > button {
     margin: 0.5rem;
-    padding: 0.5rem;
+    padding: 8px 20px;
     font-size: 1rem;
-    border-radius: 0.25rem;
+    border-radius: 40px;
+    box-shadow: 0 0 2px darkslategray;
+}
+
+.buttonContainer >button:hover {
+    background-color: #80808060;
 }
 
 .editDialog > .buttonContainer {
@@ -128,10 +161,11 @@
 
 @media (prefers-color-scheme: dark) {
     .editDialog {
-        background-color: black;
+        background-color: white;
+        color: black;
     }
     .buttonContainer > button {
-        background-color: gray;
+        background-color: rgb(17, 17, 17);
     }
 }
 
