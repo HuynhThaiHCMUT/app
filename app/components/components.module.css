@@ -75,6 +75,107 @@ animation: spin 1s linear infinite; /* CSS animation for spinning */
     display: none;
 }
 
+
+.footerBar {
+    display: block;
+    height: fit-content;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    background-color: #000000ED;
+    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+}
+
+.footerSection {
+    display: flex; 
+    position: relative;
+    flex-wrap: wrap;
+    align-content: center;
+    margin: 30px;
+    width: 100%;
+    justify-content: space-between;
+    height: fit-content;
+}
+
+.whiteln {
+    padding: 0.5px 0 0 0;
+    background-color: #e2e2e2;
+}
+
+.footerColumn {
+    display: inline-block;
+    width: auto;
+    flex: 1;
+    position: relative;
+}
+
+.footerColumn h2 {
+    display: block;
+    font-size: 40px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+}
+
+.footerColumn p {
+    display: block;
+    font-size: 16px;
+    color: #e2e2e2;
+    margin: 0;
+}
+
+.footerColumn h4 {
+    display: block;
+    font-size: 20px;
+    font-weight: normal;
+    color: #fff;
+    margin: 0;
+}
+
+.footerColumn h3 {
+    display: block;
+    font-size: 25px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+}
+
+.footerForm {
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.footerForm input{
+    height: 70px;
+    border-radius: 8px;
+    font-size: 20px;
+    line-height: 1.3em;
+    transition: all ease-out 0.3s;
+}
+
+.footerForm input[type="email"] {
+    padding: 0 0 0 20px;
+    width : 60%;
+}
+
+.footerForm input[type="submit"] {
+    width : 30%;
+    background-color: #00cf91;
+    color: #fff;
+}
+
+.footerForm input[type="submit"]:hover {
+    background-color: #ff0808;
+    cursor: pointer;
+}
+
+.footerSection small {
+    color: #e2e2e2
+}
+
 @keyframes spin {
 0% {
     transform: rotate(0deg);
