@@ -5,7 +5,13 @@ import styles from './page.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DisplayItem from './components/displayItem';
 import { faFilter, faX } from '@fortawesome/free-solid-svg-icons';
-
+import Image from "next/image";
+import Logo from "./img/logo.jpg";
+import slider from "./img/slider.png";
+import snack from "./img/snack.png";
+import water from "./img/water.png";
+import skippy from "./img/skippy.png";
+import milo from "./img/milo.png";
 export default function Home() {
     const [q, setQ] = useState("");
     const [tag, setTag] = useState("Tất cả");
@@ -165,11 +171,7 @@ export default function Home() {
           <FontAwesomeIcon icon={faFilter} />
         </button> */}
       </div>
-      <div className={styles.displayList}>
-        {data.map((value: ProductData) => (
-          <DisplayItem item={value} key={value.id} />
-        ))}
-      </div>
+     
       <div className={styles.slider}>
         <div className={styles.filterSection}>
           <h3>Phân loại sản phẩm</h3>

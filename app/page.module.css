@@ -8,11 +8,19 @@
   overflow-y: scroll;
   padding: 0rem 1rem 0rem 1rem;
   max-height: calc(100vh - 7.25rem);
+  border: black;
+}
+.pages{
+  background: white;
 }
 
 .container {
   display: flex;
-  margin-bottom: 1rem;
+ 
+  background: white;
+  height: 100px;
+  /* justify-content: center; */
+  align-items: center;
 }
 
 .container button {
@@ -31,13 +39,48 @@
 .container button:active {
   background-color: rgb(51, 51, 192);
 }
+.imageLogo{
+  flex:0.1;
+  height: 50px;
+  font-size: 1rem;
+  padding: 0.25rem;
+  /* width: 1rem; */
+  margin-left: 2rem;
+  margin-right: 1rem  ;
+  justify-self: left;
+  background-color:white;
+}
 
 .searchBar {
-  flex: 1;
+  flex:0.6  ;
+  height: 50px;
   font-size: 1.25rem;
   padding: 0.25rem;
   width: 1rem;
+  justify-self: center;
+  margin-left: 150px;
+  border-radius: 10px;
 }
+.nameLogo {
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 400px; */
+  justify-self: left;
+}
+
+.mainName {
+  font-size: 1.5rem; /* Adjust font size as needed */
+  font-weight: bold; /* Adjust font weight as needed */
+}
+
+.subName {
+  font-size: 1rem; /* Adjust font size as needed */
+  color: gray;
+}
+
+
+/* Add any additional styling for the filter button as needed */
+
 
 .filterBackground {
   background-color: #80808060;
@@ -74,12 +117,66 @@
   border: none;
   font-size: 1.5rem;
 }
-
-.filterSection {
+.slider {
   flex: 1;
-  padding: 1rem;
+  padding-left: 2rem;
+  display: flex;
+  background-color: white;
+  height: 35rem;
 }
 
+.filterSection {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 27%;
+  background-color: #f6f6f6;
+  border-radius: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.sliderSection {
+  display: flex;
+  background-color: #006FFF;
+  width: 70%;
+  border-radius: 1rem;
+  margin-right: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.textColumn {
+  flex: 0.3;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  flex-direction: column;
+  
+  padding-left: 4rem;
+
+  color: white; /* Added text color for better visibility */
+}
+.textColumn>h3 {
+  font-size: 2rem ;
+}
+
+.textColumn>h2 {
+  font-size: 3rem;
+}
+
+.imageColumn {
+  flex: 0.6;
+  display: flex;
+  height: 32rem;
+  
+}
+
+.imageSlider {
+  width: 100%;
+  height: 100%;
+}
 .filterSection > div {
   display: flex;
   flex-wrap: wrap;
@@ -92,6 +189,7 @@
   width: 10rem;
   border: none;
   background-color: #dcdcdc;
+  border-radius: 0.5rem;
 }
 
 .activeBox {
@@ -100,11 +198,59 @@
   width: 10rem;
   border: none;
   background-color: #a0a0a0;
+  border-radius: 0.5  rem;
 }
+.trendSection{
+  padding-top: 5rem;
+  background-color: white;
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+}
+/* Example CSS Module Styles */
+
+.trend1, .trend2,.trend3 {
+  flex: 1;
+  text-align: center; /* Center content horizontally */
+
+  border-radius: 1rem;
+  justify-content: center;
+  align-items: center;
+
+}
+.trend2{
+  margin-right: 2rem;
+  margin-left: 2rem;
+}
+.trend1{
+  margin-left: 2rem;
+  background-color: transparent;
+    background-image: radial-gradient(at center center,#FFEC01 3%,#FD430A 62%);
+}
+.trend21{
+  background-color: transparent;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  justify-self: top;
+  background-image: linear-gradient(270deg,#AE4E2F 0%,#632B12 100%);
+}
+.trend22{
+  background-color: transparent;
+  justify-self: bottom;
+  border-radius: 1rem;
+    background-image: linear-gradient(90deg,#BBECFF 0%,#00B2FF 49%);
+}
+.trend3{
+  background-color: transparent;
+  margin-right: 2rem;
+  background-image: radial-gradient(at center center,#E6FF00 3%,#40B44B 62%);
+}
+/* Add styles for imgSnack, imgMilo, imgWater as needed */
 
 .hidden {
   display: none;
 }
+
+/* Trong tệp CSS hoặc SCSS của bạn */
 
 @media (prefers-color-scheme: dark) {
   .filterHeader {
