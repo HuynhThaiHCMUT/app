@@ -1,13 +1,15 @@
 type Unit = {
     name: string,
     price: number,
-    weight: number
+    weight: number,
+    image?: string
 }
 
 type UnconvertedUnit = {
     name: string,
     price: string,
-    weight: string
+    weight: string,
+    image?: string
 }
 
 type ProductData = {
