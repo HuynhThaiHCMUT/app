@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
     else {
         const query = req.nextUrl.searchParams.get("q") ?? "";
-        const category = req.nextUrl.searchParams.get("tag") ?? "";
+        const category = req.nextUrl.searchParams.get("tag") ?? "Tất cả";
         const sort = req.nextUrl.searchParams.get("sort") ?? "";
 
         let data: any[];

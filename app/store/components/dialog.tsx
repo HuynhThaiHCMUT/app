@@ -5,6 +5,7 @@ import { Context } from '../contextProvider'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { CldUploadButton } from 'next-cloudinary';
 
 function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
@@ -64,7 +65,8 @@ function AddDialog() {
                     return {
                         name: value.name,
                         price: parseInt(value.price),
-                        weight: parseInt(value.weight)
+                        weight: parseInt(value.weight),
+                        image: value.image
                     }
                 })
             } 
@@ -120,9 +122,9 @@ function AddDialog() {
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
                         (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
                 </div>
-                {(index != 0) ? <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button> : <></>}
+                </button>
             </div>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
@@ -197,7 +199,8 @@ function EditDialog() {
                     return {
                         name: value.name,
                         price: parseInt(value.price),
-                        weight: parseInt(value.weight)
+                        weight: parseInt(value.weight),
+                        image: value.image
                     }
                 })
             } 
@@ -253,9 +256,21 @@ function EditDialog() {
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
                         (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
                 </div>
-                {(index != 0) ? <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                <CldUploadButton 
+                className={styles.upload}
+                uploadPreset="next-unsigned"
+                onUpload={(result, widget) => {
+                    if (value.image) {
+                        fetch(`/api/image?id=${value.image}`)
+                    }
+                    setUnits(units.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, image: (result?.info as any).public_id} : subValue))
+                    widget.close();
+                }}/>
+                <button className={styles.remove} onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button> : <></>}
+                </button>
+                
             </div>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
