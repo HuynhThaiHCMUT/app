@@ -11,7 +11,7 @@
 }
 
 .editDialog {
-    background-color: white;
+    background-color: black;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -19,7 +19,8 @@
     border-radius: 2rem;
     padding: 2rem;
     max-height: 95vh;
-    overflow: scroll;
+    overflow: hidden;
+    font-weight: bold;
 }
 
 .editDialog > p {
@@ -36,6 +37,13 @@
     font-size: 1rem;
     margin-bottom: 1rem;
     width: 30rem;
+    border-radius: 40px;
+    min-height: 4vh;
+    padding: 10px 15px;
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    margin-top: 8px;
+    box-shadow: 0 0 2px darkslategray;
 }
 
 .editDialog > button {
@@ -62,6 +70,16 @@
     color: darkgreen;
 }
 
+.editDialog input::-webkit-outer-spin-button,
+.editDialog input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.editDialog input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .nameContainer {
     display: flex;
     flex-direction: row;
@@ -73,9 +91,19 @@
 }
 
 .nameContainer input {
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    border-radius: 40px;
+    min-height: 4vh;
+    font-size: 1rem;
     font-size: 1rem;
     width: 14.5rem;
+    width: 14.5rem;
     margin-bottom: 0rem;
+    margin-bottom: 0rem;
+    padding: 10px 15px;
+    margin-top: 8px;
+    box-shadow: 0 0 2px darkslategray;
 }
 
 .scheduleContainer {
@@ -90,8 +118,15 @@
 
 .scheduleContainer input {
     font-size: 1rem;
-    width: 13rem;
+    width: 14.5rem;
     margin-bottom: 0rem;
+    border-radius: 40px;
+    min-height: 4vh;
+    padding: 10px 15px;
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    margin-top: 8px;
+    box-shadow: 0 0 2px darkslategray;
 }
 
 .scheduleContainer > button {
@@ -133,11 +168,15 @@
 
 .buttonContainer > button {
     margin: 0.5rem;
-    padding: 0.5rem;
+    padding: 8px 20px;
     font-size: 1rem;
-    border-radius: 0.25rem;
+    border-radius: 40px;
+    box-shadow: 0 0 2px darkslategray;
 }
 
+.buttonContainer >button:hover {
+    background-color: #80808060;
+}
 .editDialog > .buttonContainer {
     align-self: flex-end;
 }
@@ -161,12 +200,18 @@
     display: flex;
     max-height: calc(100vh - 8.5rem);
     overflow: auto;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .tableHeader th {
-    background-color: lightblue;
+    color: white;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+.tableBody > tr{
+    font-weight: normal;
 }
 
 .tableBody > tr:nth-child(odd) {
@@ -206,25 +251,26 @@
 
 @media (prefers-color-scheme: dark) {
     .editDialog {
-        background-color: black;
+        background-color: whitesmoke;
+        color: black;
     }
     .delDialog {
         background-color: black;
     }
     .buttonContainer > button {
-        background-color: gray;
+        background-color: rgb(17, 17, 17);
     }
 
     .tableHeader th {
-        background-color: #000137;
+        background-color: #01987a;
     }
     
     .tableBody > tr:nth-child(odd) {
-        background-color: rgb(27, 30, 45);
+        background-color: #ffffff;
     }
     
     .tableBody > tr:nth-child(even) {
-        background-color: black;
+        background-color: #f3f3f3;
     }
 }
 
