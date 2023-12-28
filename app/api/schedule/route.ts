@@ -21,12 +21,19 @@ export async function GET(req: NextRequest) {
                 success: false,
                 message: error.sqlMessage,
             };
-            return NextResponse.json(response);
+            return NextResponse.json([]);
         }
     } else {
         const id = req.nextUrl.searchParams.get("id") ?? "-1";
-        const data = (await client.execute("SELECT wid AS id, start_hour AS startHour, end_hour AS endHour FROM Working_schedule WHERE uid = ?", [parseInt(id)]))[0];
-        return NextResponse.json(data);
+        try {
+            const data = (await client.execute("SELECT wid AS id, start_hour AS startHour, end_hour AS endHour FROM Working_schedule WHERE uid = ?", [parseInt(id)]))[0];
+            return NextResponse.json(data);
+        }
+        catch (error: any) {
+            console.error(error);
+
+            return NextResponse.json([]);
+        }
     }
 }
 

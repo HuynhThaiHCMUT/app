@@ -9,7 +9,13 @@ export async function GET(req: NextRequest) {
     const end = req.nextUrl.searchParams.get("end") ?? "";
     const top = req.nextUrl.searchParams.get("top") ?? "";
 
-    let data = (await client.execute("CALL GetTopSellingProductsProcedure(?, ?, ?)", [parseInt(top), new Date(parseInt(start)), new Date(parseInt(end))]))[0] as TopProductData[];
+    try {
+        let data = (await client.execute("CALL GetTopSellingProductsProcedure(?, ?, ?)", [parseInt(top), new Date(parseInt(start)), new Date(parseInt(end))]))[0] as TopProductData[];
 
-    return NextResponse.json(data[0]);
+        return NextResponse.json(data[0]);
+    } catch (error: any) {
+        console.log(error);
+
+        return NextResponse.json([])
+    }
 }

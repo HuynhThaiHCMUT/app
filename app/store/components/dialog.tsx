@@ -122,7 +122,18 @@ function AddDialog() {
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
                         (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
                 </div>
-                <button onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                <CldUploadButton 
+                className={styles.upload}
+                uploadPreset="next-unsigned"
+                onUpload={(result, widget) => {
+                    if (value.image) {
+                        fetch(`/api/image?id=${value.image}`)
+                    }
+                    setUnits(units.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, image: (result?.info as any).public_id} : subValue))
+                    widget.close();
+                }}/>
+                <button className={styles.remove} onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
                     <FontAwesomeIcon icon={faXmark}/>
                 </button>
             </div>)}

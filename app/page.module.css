@@ -62,13 +62,11 @@
 
 
 .pages{
-  background: white;
+
 }
 
 .container {
   display: flex;
- 
-  background: white;
   height: 100px;
   /* justify-content: center; */
   align-items: center;
@@ -92,14 +90,13 @@
 }
 .imageLogo{
   flex:0.1;
-  height: 50px;
+  height: 100px;
   font-size: 1rem;
   padding: 0.25rem;
   /* width: 1rem; */
   margin-left: 2rem;
   margin-right: 1rem  ;
   justify-self: left;
-  background-color:white;
 }
 
 .searchBar {
@@ -148,12 +145,10 @@
   display: flex;
   flex-direction: column;
   width: 24rem;
-  background-color: white;
 }
 
 .filterHeader {
   display: flex;
-  background-color: lightgray;
   padding: 1rem;
   height: 4rem;
   justify-content: center;
@@ -172,7 +167,6 @@
   flex: 1;
   padding-left: 2rem;
   display: flex;
-  background-color: white;
   height: 35rem;
   margin-bottom: 1rem;
 }
@@ -182,7 +176,6 @@
   display: flex;
   flex-direction: column;
   width: 25rem;
-  background-color: #f6f6f6;
   border-radius: 1rem;
   justify-content: center;
   align-items: center;
@@ -253,8 +246,7 @@
   border-radius: 0.5  rem;
 }
 .trendSection{
-  padding-top: 5rem;
-  background-color: white;
+  padding-top: 1rem;
   display: flex;
   justify-content: space-between; /* Adjust as needed */
 }

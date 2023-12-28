@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DisplayItem from './components/displayItem';
 import { faFilter, faGreaterThan, faLessThan, faX } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
-import Logo from "./img/logo.jpg";
+import Logo from "./img/logo.png";
 import slider from "./img/slider.png";
 import snack from "./img/snack.png";
 import water from "./img/water.png";
@@ -130,7 +130,7 @@ export default function Home() {
         /> */}
         <div className={styles.nameLogo}>
           <div className={styles.mainName}>Grocery</div>
-          <div className={styles.subName}>TTAKD</div>
+          <div className={styles.subName}>Dream Team</div>
         </div>
 
         <input

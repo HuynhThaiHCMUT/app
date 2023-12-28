@@ -12,7 +12,7 @@
 
 .editDialog {
     background-color: white;
-    /*display: flex;*/
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
@@ -22,7 +22,7 @@
     padding-right: 15px;
     font-weight: bold;
     max-height: 90vh;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .editDialog > h2 {
@@ -48,7 +48,7 @@
     padding: 0.25rem;
     background-color: transparent;
     border-style: solid;
-    color: green;
+    color: lightgreen;
 }
 
 .editDialog > button:hover {
@@ -81,7 +81,7 @@
 
 .unitContainer input {
     font-size: 1rem;
-    width: 7rem;
+    width: 6rem;
     margin-bottom: 0rem;
     margin-top: 8px;
     min-height: 4vh;
@@ -92,27 +92,33 @@
     box-shadow: 0 0 2px darkslategray;
 }
 
-.unitContainer > button {
-    border-radius: 70%;
-    height: 25px;
-    width: 25px;
-    margin-top: 7%;
-    padding: 5px;  
-}
-
 .upload {
     font-size: 1rem;
-    height: 1.5rem;
-    width: 5rem;
+    width: 6rem;
     margin-bottom: 0rem;
+    margin-top: 8px;
+    min-height: 4vh;
+    border-radius: 40px;
+    padding: 10px 15px;
+    background-color: rgba(17, 17, 17, 0.1);
+    color: black;
+    box-shadow: 0 0 2px darkslategray;
     align-self: flex-end;
+}
+
+.upload:hover {
+    color: green;
+}
+
+.upload:active {
+    color: darkgreen;
 }
 
 .remove {
     background-color: transparent;
-    font-size: 1rem;
-    height: 1.5rem;
-    width: 1.5rem;
+    font-size: 2rem;
+    height: 2.75rem;
+    width: 3rem;
     border-radius: 0.25rem;
     align-self: flex-end;
     border-width: 0rem;
@@ -184,6 +190,9 @@
     }
     .buttonContainer > button {
         background-color: rgb(17, 17, 17);
+    }
+    .remove {
+        color: black;
     }
 }
 
