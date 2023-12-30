@@ -260,11 +260,6 @@
         background-color: rgb(17, 17, 17);
     }
 
-    .tableHeader th {
-        background-color: #01987a;
-        color: white;
-    }
-    
     .tableBody > tr:nth-child(odd) {
         background-color: #ffffff;
     }
@@ -273,6 +268,11 @@
         background-color: #f3f3f3;
     }
 }
+
+.tableHeader th {
+        background-color: #01987a;
+        color: white;
+    }
 
 @media (max-width: 800px) {
     .dialogBackground {
