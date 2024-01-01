@@ -115,6 +115,7 @@
     border-spacing: 0;
     flex: 1;
     border: 0.1rem solid #111111;
+    overflow-y: scroll;
 }
 
 .tableDiv {
@@ -122,6 +123,8 @@
     flex: 1;
     flex-direction: row;
     overflow: auto;
+    overflow-y: scroll;
+    max-height: 40rem;
 }
 .tableHeader{
     border: 0.1rem solid #111111;
