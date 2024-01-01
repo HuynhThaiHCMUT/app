@@ -8,8 +8,7 @@ cloudinary.config({
 })
 
 export async function GET(req: NextRequest) {
-    const id = req.nextUrl.searchParams.get("id") ?? "";
-    
+    const id = req.nextUrl.searchParams.get("id") ?? "";        
     const res = await cloudinary.uploader.destroy(id);
 
     return NextResponse.json(res);

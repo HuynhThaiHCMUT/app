@@ -20,6 +20,8 @@ function SumDialog() {
     const [data, setData] = useState<TotalWorkingHoursData[]>([]);
     const [message, setMessage] = useState("");
 
+    useEffect(() => setMessage(""), [showSumDialog]);
+
     useEffect(() => {
         async function getData() {
             let res = await fetch(`/api/schedule?start=${start}&end=${end}`, {cache: "no-store"});
@@ -376,9 +378,7 @@ function DelDialog() {
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
 
-    useEffect(() => {
-        setMessage("");
-    }, [showDelDialog])
+    useEffect(() => setMessage(""), [showDelDialog])
 
     useEffect(() => {
         async function deleteStaff() {

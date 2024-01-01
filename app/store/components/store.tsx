@@ -5,11 +5,12 @@ import styles from "./store.module.css";
 import { useContext, useEffect, useState } from "react";
 import {
   faFilter,
+  faList,
   faPen,
   faX,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { AddDialog, DelDialog, EditDialog } from "./dialog";
+import { AddDialog, DelDialog, EditDialog, UnitDialog } from "./dialog";
 import { Context } from "../contextProvider";
 
 export default function Store() {
@@ -20,6 +21,7 @@ export default function Store() {
     setData,
     setShowAddDialog,
     setShowEditDialog,
+    setShowUnitDialog,
     setShowDelDialog,
     selectedProduct,
     select,
@@ -61,6 +63,11 @@ export default function Store() {
     setShowEditDialog(true);
   }
 
+  function editUnit(p: ProductData) {
+    select(p);
+    setShowUnitDialog(true);
+  };
+
   function deleteItem(p: ProductData) {
     select(p);
     setShowDelDialog(true);
@@ -70,6 +77,7 @@ export default function Store() {
     <div className={styles.store}>
       <AddDialog />
       <EditDialog />
+      <UnitDialog />
       <DelDialog />
       <div
         className={showFilter ? styles.filterBackground : styles.hidden}
@@ -158,35 +166,37 @@ export default function Store() {
         </div>
         <div className={styles.tableDiv}>
           <table className={styles.table}>
-            <thead className={styles.tableHeader}>
-              <tr>
-                <th className={styles.id}>ID</th>
-                <th className={styles.name}>Tên sản phẩm</th>
-                <th className={styles.quantity}>Số lượng</th>
-                <th className={styles.weight}>Trạng thái</th>
-                <th className={styles.basePrice}>Giá gốc</th>
-                <th className={styles.action}></th>
-              </tr>
-            </thead>
-            <tbody className={styles.tableBody}>
-              {data.map((value: ProductData) => (
-                <tr key={value.id}>
-                  <td>{value.id}</td>
-                  <td>{value.name}</td>
-                  <td>{value.quantity}</td>
-                  <td>{value.status}</td>
-                  <td>{value.basePrice}</td>
-                  <td>
-                    <button onClick={() => editItem(value)}>
-                      <FontAwesomeIcon icon={faPen} />
-                    </button>
-                    <button onClick={() => deleteItem(value)}>
-                      <FontAwesomeIcon icon={faXmark} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+              <thead className={styles.tableHeader}>
+                  <tr>
+                      <th className={styles.id}>ID</th>
+                      <th className={styles.name}>Tên sản phẩm</th>
+                      <th className={styles.quantity}>Số lượng</th>
+                      <th className={styles.weight}>Trạng thái</th>
+                      <th className={styles.basePrice}>Giá gốc</th>
+                      <th className={styles.action}></th>
+                  </tr>
+              </thead>
+              <tbody className={styles.tableBody}>
+                  {data.map((value: ProductData) => 
+                  <tr key={value.id}>
+                      <td>{value.id}</td>
+                      <td>{value.name}</td>
+                      <td>{value.quantity}</td>
+                      <td>{value.status}</td>
+                      <td>{value.basePrice}</td>
+                      <td>
+                          <button onClick={() => editUnit(value)}>
+                              <FontAwesomeIcon icon={faList}/>
+                          </button>
+                          <button onClick={() => editItem(value)}>
+                              <FontAwesomeIcon icon={faPen}/>
+                          </button>
+                          <button onClick={() => deleteItem(value)}>
+                              <FontAwesomeIcon icon={faXmark}/>
+                          </button>
+                      </td>
+                  </tr>)}
+              </tbody>
           </table>
         </div>
       </div>
