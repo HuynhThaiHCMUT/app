@@ -1,7 +1,7 @@
 .headerBar {
     flex: 0 0 4rem;
     max-height: 3rem;
-    background: linear-gradient(to right, white, lightgray);
+    background: #111111;
     display: grid;
     grid-template-columns: 10% 18% 18% 18% 18% 18%;
 }
@@ -11,6 +11,7 @@
     font-size: 2rem;
     background-color: transparent;
     border-width: 0rem;
+    color: white;
     justify-self: end;
 }
 
@@ -22,6 +23,7 @@
     padding: 0.75rem;
     font-size: 1.25rem;
     display: flex;
+    color:white;
 }
 
 .headerTab p {
@@ -29,6 +31,7 @@
     justify-self: start;
     white-space: nowrap;
     margin-left: 0.75rem;
+    color: white;
 }
 
 .authButton {

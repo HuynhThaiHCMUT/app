@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DisplayItem from './components/displayItem';
 import { faFilter, faGreaterThan, faLessThan, faX } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
-import Logo from "./img/logo.png";
+import Logo from "./img/logo.jpg";
 import slider from "./img/slider.png";
 import snack from "./img/snack.png";
 import water from "./img/water.png";
@@ -20,7 +20,7 @@ export default function Home() {
     const [category, setCategory] = useState<Category[]>([]);
     const [updated, update] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
-
+    const dealOfTheDayRef = useRef<HTMLDivElement | null>(null);
     const productListRef = useRef<HTMLDivElement>(null);
 
     const scrollLeft = () => {
@@ -39,6 +39,28 @@ export default function Home() {
               behavior: "smooth",
           }); // Điều chỉnh giá trị này để thay đổi khoảng cách cuộn
           }
+      };
+      const scrollToDealOfTheDay = () => {
+        if (dealOfTheDayRef.current) {
+          dealOfTheDayRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end", 
+          });
+        }
+      };
+      const handleButtonClick = (clickedTag:string) => {
+        // Thực thi hàm 1
+        setTag(clickedTag)
+      
+        // Thực thi hàm 2
+        scrollToDealOfTheDay()
+      };
+      const handleCickSearch = (clickedTag:string) => {
+        // Thực thi hàm 1
+        setQ(clickedTag)
+      
+        // Thực thi hàm 2
+        scrollToDealOfTheDay()
       };
 
     useEffect(() => {
@@ -84,53 +106,40 @@ export default function Home() {
           <div className={styles.filterSection}>
             <h3>Phân loại sản phẩm</h3>
             <div>
-              <button
+            <button
                 className={
-                  tag == "Tất cả" ? styles.activeBox : styles.filterBox
+                  tag === "Tất cả" ? styles.activeBox : styles.filterBox
                 }
-                onClick={() => setTag("Tất cả")}
+                onClick={() => {
+                  setTag("Tất cả");
+                  scrollToDealOfTheDay();
+                }}
               >
                 {"Tất cả"}
               </button>
               {category.map((value, index) => (
-                <button
-                  key={index}
-                  className={
-                    tag == value.name ? styles.activeBox : styles.filterBox
-                  }
-                  onClick={() => setTag(value.name)}
-                >
-                  {value.name}
-                </button>
+                 <button
+                 key={index}
+                 className={
+                   tag === value.name ? styles.activeBox : styles.filterBox
+                 }
+                 onClick={() => {
+                   setTag(value.name);
+                   scrollToDealOfTheDay();
+                 }}
+               >
+                 {value.name}
+               </button>
               ))}
             </div>
           </div>
-          {/* <div className={styles.filterSection}>
-                    <h3>Sắp xếp sản phẩm</h3>
-                    <div>
-                    {sorts.map((value, index) => 
-                        <button key={index}
-                            className={(sort == value) ? styles.activeBox : styles.filterBox}
-                            onClick={() => setSort(value)}>{value}</button>)}
-                    </div>
-                </div> */}
         </div>
       </div>
       <div className={styles.container}>
         <Image src={Logo} alt="" className={styles.imageLogo} />
-        {/* <CldImage
-          className={styles.imageLogo}
-          width="50"
-          height="50"
-          src=""
-          sizes="100vw"
-          aspectRatio="16:9"
-          crop="fill"
-          alt="Description of my image"
-        /> */}
         <div className={styles.nameLogo}>
           <div className={styles.mainName}>Grocery</div>
-          <div className={styles.subName}>Dream Team</div>
+          <div className={styles.subName}>Dream</div>
         </div>
 
         <input
@@ -140,6 +149,11 @@ export default function Home() {
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
+          }}
+          onKeyDown={(f) => {
+            if (f.key === 'Enter') {
+              scrollToDealOfTheDay();
+            }
           }}
         />
         {/* <button onClick={() => setShowFilter(true)}>
@@ -151,36 +165,36 @@ export default function Home() {
         <div className={styles.filterSection}>
           <h3>Phân loại sản phẩm</h3>
           <div>
-            <button
+          <button
               className={tag == "Tất cả" ? styles.activeBox : styles.filterBox}
-              onClick={() => setTag("Tất cả")}
+              onClick={() => handleButtonClick("Tất cả")}
             >
               {"Tất cả"}
             </button>
             {category.map((value, index) => (
-              <button
-                key={index}
-                className={
-                  tag == value.name ? styles.activeBox : styles.filterBox
-                }
-                onClick={() => setTag(value.name)}
-              >
-                {value.name}
-              </button>
+               <button
+               key={index}
+               className={
+                 tag == value.name ? styles.activeBox : styles.filterBox
+               }
+               onClick={() => handleButtonClick(value.name)}
+             >
+               {value.name}
+             </button>
             ))}
           </div>
         </div>
         <div className={styles.sliderSection}>
           <div className={styles.textColumn}>
-            <h3>Siêu sale ưu đãi</h3>
-            <h2>Giảm giá đến 40%</h2>
+          <h3>Chào mừng đến với</h3>
+            <h2>DREAM GROCERY</h2>
           </div>
           <div className={styles.imageColumn}>
             <Image src={slider} alt="" className={styles.imageSlider} />
           </div>
         </div>
       </div>
-      <div className={styles.dealOfTheDay}>
+      <div ref={dealOfTheDayRef} className={styles.dealOfTheDay}>
             <div className={styles.dealHeader}>
                 <p className={styles.dealTitle}>Danh sách sản phẩm</p>
                 <button className={styles.buttonLeft} onClick={scrollLeft}> <FontAwesomeIcon icon={faLessThan} /></button>
@@ -188,28 +202,39 @@ export default function Home() {
             </div>
             <div className={styles.displayList} ref={productListRef}> {data.map((value: ProductData) => <DisplayItem item={value} key={value.id} />)} </div>
         </div>
+        <div className={styles.trendTitle}>
+        <h2>  Tiêu chí cửa hàng</h2>
+      </div>
       <div className={styles.trendSection}>
         <div className={styles.trend1}>
           <Image src={snack} alt="" className={styles.imgSnack} />
-          <h3>One Day Delivery</h3>
-          <h4>Get Up To 30% Off</h4>
+          <h3>Chất lượng sản phẩm</h3>
+          <h5>Cam kết chỉ bán sản phẩm chất lượng và đáng tin cậy,</h5>
+          <h5>tuân thủ đầy đủ các tiêu chuẩn an toàn thực phẩm.</h5>
         </div>
         <div className={styles.trend2}>
           <div className={styles.trend21}>
-            <h3>One Day Delivery</h3>
-            <h4>Get Up To 30% Off</h4>
+            <div className={styles.textTrend21}>
+              <h3>Chất lượng dịch vụ</h3>
+              <h5>Chăm sóc khách hàng tận tâm</h5>
+              <h5>Không gian cửa hàng sạch sẽ, gọn gàng. </h5>
+            </div>
             <Image src={milo} alt="" className={styles.imgMilo} />
           </div>
           <div className={styles.trend22}>
-            <h3>One Day Delivery</h3>
-            <h4>Get Up To 30% Off</h4>
             <Image src={skippy} alt="" className={styles.imgSkippy} />
+            <div className={styles.textTrend22}>
+              <h3>Tiêu dùng "xanh" </h3>
+              <h5> Sử dụng túi tái sử dụng và cung cấp</h5>
+              <h5> các sản phẩm thân thiện với môi trường.</h5>
+            </div>
           </div>
         </div>
         <div className={styles.trend3}>
           <Image src={water} alt="" className={styles.imgWater} />
-          <h3>One Day Delivery</h3>
-          <h4>Get Up To 30% Off</h4>
+          <h2>Đa dạng sản phẩm </h2>
+          <h5>Cung cấp đầy đủ sản phẩm từ</h5>
+          <h5> thực phẩm, đồ khô đến hàng tiêu dùng và đồ gia dụng.</h5>
         </div>
       </div>
     </div>
