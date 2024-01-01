@@ -28,7 +28,8 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         unit: {
             name: "",
             price: 0,
-            weight: 0
+            weight: 0,
+            active: true
         },
         total: 0
     });
