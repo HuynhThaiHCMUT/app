@@ -222,6 +222,7 @@ function UnitDialog() {
                     setMessage("");
                 }
                 else {
+                    update(!updated);
                     setMessage(dbres.message);
                 }
             }

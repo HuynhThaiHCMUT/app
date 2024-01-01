@@ -9,7 +9,17 @@ export async function POST(req: NextRequest) {
         for (const u of unit.units) {
             if (u.deleted && u.changed) continue;
             if (u.deleted) {
-                await client.execute("CALL DeleteUnit(?, ?)", [unit.id, u.name]);
+                try {
+                    await client.execute("CALL DeleteUnit(?, ?)", [unit.id, u.name]);
+                } catch (error: any) {
+                    console.error(error);
+                
+                    if (error.sqlState == 53001) continue
+                    else return NextResponse.json({
+                        success: false,
+                        message: error.sqlMessage,
+                    });
+                }
             } else if (u.changed) {
                 const old = (await client.execute("SELECT * FROM Unit Where pid = ? AND name = ?", [unit.id, u.name]))[0] as any;
 
