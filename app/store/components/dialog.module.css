@@ -204,6 +204,7 @@
 }
 
 .message {
+    max-width: 30rem;
     color: red;
     text-align: center;
     text-wrap: wrap;

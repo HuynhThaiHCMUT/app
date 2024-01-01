@@ -284,11 +284,11 @@ function UnitDialog() {
                     (index === subIndex) ? {...subValue, deleted: true} : subValue))}>
                     <FontAwesomeIcon icon={faXmark}/>
                 </button> : <button className={styles.remove} onClick={() => setUnits(units.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, active: true} : subValue))}>
+                    (index === subIndex) ? {...subValue, active: true, changed: true} : subValue))}>
                     <FontAwesomeIcon icon={faCheck}/>
                 </button>}
             </div>
-            {(value.image) ? <CldImage width={400} height={240} src={value.image} alt={`Image: ${value.name}`}/> : <></>}</>)}
+            {(value.image) ? <CldImage width={360} height={270} src={value.image} alt={`Image: ${value.name}`}/> : <></>}</>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
                 price: "",

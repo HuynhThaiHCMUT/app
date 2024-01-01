@@ -19,7 +19,7 @@ export default function Sale() {
 
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/api/product?q=${q}`, {cache: "no-store"});
+            let res = await fetch(`/api/sale?q=${q}`, {cache: "no-store"});
             if (res.ok) {
                 let products = await res.json();
                 setData(products);
@@ -77,8 +77,8 @@ export default function Sale() {
                         <tr key={value.id}>
                             <td>{value.name}</td>
                             <td>{value.quantity}</td>
-                            <td>{value.units.map((value, index) => <p key={index}>{value.name}</p>)}</td>
-                            <td>{value.units.map((value, index) => <p key={index}>{value.price}</p>)}</td>
+                            <td>{value.units?.map((value, index) => <p key={index}>{value.name}</p>)}</td>
+                            <td>{value.units?.map((value, index) => <p key={index}>{value.price}</p>)}</td>
                             <td>
                                 <button className={styles.addButton} onClick={() => addInvoice(value)}>
                                     <FontAwesomeIcon icon={faPlus}/>

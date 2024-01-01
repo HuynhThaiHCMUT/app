@@ -187,6 +187,7 @@
 }
 
 .message {
+    max-width: 30rem;
     color: red;
     align-self: center;
     text-wrap: wrap;

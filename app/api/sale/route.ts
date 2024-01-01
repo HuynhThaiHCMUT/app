@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { clientPromise } from '../db';
 import { ResultSetHeader } from 'mysql2';
 
+export async function GET(req: NextRequest) {
+    const client = await clientPromise;
+
+    const query = req.nextUrl.searchParams.get("q") ?? "";
+
+    let data: any[];
+    data = (await client.execute("SELECT pid AS id, name, base_price AS basePrice, description, quantity, status FROM Product"))[0] as any[];
+    
+    let filtered = data.filter((value) => (value.name.match(new RegExp(query, "i")) != null))
+
+    let unitTable = (await client.execute("SELECT * FROM Unit WHERE active = true"))[0] as any[];
+    filtered = filtered.map((value) => {
+        return {...value, units: unitTable.filter((unitValue) => unitValue.pid == value.id)};
+    })
+    return NextResponse.json(filtered);
+}
+
 export async function POST(req: NextRequest) {
     const client = await clientPromise;
     const invoice: Invoice[] = await req.json();

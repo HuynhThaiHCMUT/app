@@ -202,7 +202,7 @@ export default function Home() {
                   <button className={styles.buttonLeft} onClick={scrollLeft}> <FontAwesomeIcon icon={faLessThan} /></button>
                   <button className={styles.buttonRight} onClick={scrollRight}><FontAwesomeIcon icon={faGreaterThan} /></button>
               </div>
-              <div className={styles.displayList} ref={productListRef}> {data.map((value: ProductData) => value.units?.map((subValue: Unit) => <DisplayItem product={value} unit={subValue} key={value.id} />))} </div>
+              <div className={styles.displayList} ref={productListRef}> {data.map((value: ProductData) => value.units?.map((subValue: Unit) => (subValue.active) ? <DisplayItem product={value} unit={subValue} key={value.id} /> : <></>))} </div>
           </div>
           <div className={styles.trendTitle}>
           <h2>  Tiêu chí cửa hàng</h2>
@@ -226,7 +226,7 @@ export default function Home() {
             <div className={styles.trend22}>
               <Image src={skippy} alt="" className={styles.imgSkippy} />
               <div className={styles.textTrend22}>
-                <h3>Tiêu dùng "xanh" </h3>
+                <h3>Tiêu dùng xanh </h3>
                 <h5> Sử dụng túi tái sử dụng và cung cấp</h5>
                 <h5> các sản phẩm thân thiện với môi trường.</h5>
               </div>

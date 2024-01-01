@@ -119,12 +119,11 @@
 }
 
 .tableDiv {
-    
     flex: 1;
     flex-direction: row;
     overflow: auto;
     overflow-y: scroll;
-    max-height: 40rem;
+    max-height: calc(100vh - 10rem);
 }
 .tableHeader{
     border: 0.1rem solid #111111;
