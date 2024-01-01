@@ -5,7 +5,7 @@ import { Context } from '../contextProvider'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { CldUploadButton } from 'next-cloudinary';
+import { CldImage, CldUploadButton } from 'next-cloudinary';
 
 function parseInt(s: string): number {
     return (s === "") ? 0 : Number.parseInt(s);
@@ -19,7 +19,6 @@ function AddDialog() {
     const [desc, setDesc] = useState("");
     const [quantity, setQuantity] = useState("");
     const [basePrice, setBasePrice] = useState("");
-    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -30,11 +29,6 @@ function AddDialog() {
         setDesc("");
         setQuantity("");
         setBasePrice("");
-        setUnits([{
-            name: "",
-            price: "",
-            weight: ""
-        }]);
     }, [showAddDialog])
 
     useEffect(() => {
@@ -61,14 +55,6 @@ function AddDialog() {
                 quantity: parseInt(quantity),
                 status: parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng",
                 basePrice: parseInt(basePrice),
-                units: units.map((value) => {
-                    return {
-                        name: value.name,
-                        price: parseInt(value.price),
-                        weight: parseInt(value.weight),
-                        image: value.image
-                    }
-                })
             } 
             addProduct(req);
             confirm(false);
@@ -102,50 +88,6 @@ function AddDialog() {
             <input type='number'
             value={basePrice}
             onChange={(e) => setBasePrice(e.target.value)}/>
-            {units.map((value, index) => <div key={index} className={styles.unitContainer}>
-                <div>
-                    <p>Tên đơn vị</p>
-                    <input type='text'
-                    value={value.name}
-                    onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, name: e.target.value} : subValue))}/>
-                </div>
-                <div>
-                    <p>Giá</p>
-                    <input type='number'
-                    value={value.price}
-                    onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, price: e.target.value} : subValue))}/>
-                </div>
-                <div>
-                    <p>Trọng số</p>
-                    <input type='number'
-                    value={value.weight}
-                    onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
-                </div>
-                <CldUploadButton 
-                className={styles.upload}
-                uploadPreset="next-unsigned"
-                onUpload={(result, widget) => {
-                    if (value.image) {
-                        fetch(`/api/image?id=${value.image}`)
-                    }
-                    setUnits(units.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, image: (result?.info as any).public_id} : subValue))
-                    widget.close();
-                }}/>
-                <button className={styles.remove} onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
-                    <FontAwesomeIcon icon={faXmark}/>
-                </button>
-            </div>)}
-            <button onClick={() => setUnits([...units, {
-                name: "",
-                price: "",
-                weight: ""
-            }])}>
-                <FontAwesomeIcon icon={faPlus}/>
-            </button>
             <div className={styles.buttonContainer}>
                 <button onClick={() => {
                     confirm(true);
@@ -164,7 +106,6 @@ function EditDialog() {
     const [desc, setDesc] = useState("");
     const [quantity, setQuantity] = useState("");
     const [basePrice, setBasePrice] = useState("");
-    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
 
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
@@ -175,13 +116,6 @@ function EditDialog() {
         setDesc(selectedProduct.description);
         setQuantity(selectedProduct.quantity.toString());
         setBasePrice(selectedProduct.basePrice.toString());
-        setUnits(selectedProduct.units.map((value: Unit) => {
-            return {
-                name: value.name,
-                price: value.price.toString(),
-                weight: value.weight.toString()
-            }
-        }));
     }, [showEditDialog])
 
     useEffect(() => {
@@ -201,23 +135,15 @@ function EditDialog() {
             }
         };
         if (confirmed) {
-            let req: ProductData = {
+            let p: ProductData = {
                 id: parseInt(id),
                 name: name,
                 description: desc,
                 quantity: parseInt(quantity),
                 status: parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng",
                 basePrice: parseInt(basePrice),
-                units: units.map((value) => {
-                    return {
-                        name: value.name,
-                        price: parseInt(value.price),
-                        weight: parseInt(value.weight),
-                        image: value.image
-                    }
-                })
             } 
-            editProduct(req);
+            editProduct(p);
             confirm(false);
         }
     }, [confirmed]);
@@ -249,48 +175,121 @@ function EditDialog() {
             <input type='number'
             value={basePrice}
             onChange={(e) => setBasePrice(e.target.value)}/>
-            {units.map((value, index) => <div key={index} className={styles.unitContainer}>
+            <div className={styles.buttonContainer}>
+                <button onClick={() => {
+                    confirm(true);
+                }}>Xác nhận</button>
+                <button onClick={() => setShowEditDialog(false)}>Huỷ</button>
+            </div>
+        </div>
+    </div>;
+}
+
+function UnitDialog() {
+    const {selectedProduct, showUnitDialog, setShowUnitDialog, updated, update} = useContext(Context);
+    
+    const [units, setUnits] = useState<UnconvertedUnit[]>([]);
+
+    const [confirmed, confirm] = useState(false);
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        setMessage("");
+        setUnits(selectedProduct.units.map((value: Unit) => {
+            return {
+                name: value.name,
+                price: value.price.toString(),
+                weight: value.weight.toString(),
+                active: value.active,
+                changed: false,
+                deleted: false,
+                image: value.image ?? ""
+            }
+        }));
+    }, [showUnitDialog])
+
+    useEffect(() => {
+        async function editUnit(u: UnitRequest) {
+            let res = await fetch(`/api/unit`, {method: "POST", body: JSON.stringify(u)});
+            if (!res.ok) setMessage("Internal server error")
+            else {
+                let dbres: DatabaseResponse = await res.json();
+                if (dbres.success) {
+                    update(!updated);
+                    setShowUnitDialog(false);
+                    setMessage("");
+                }
+                else {
+                    setMessage(dbres.message);
+                }
+            }
+        };
+        if (confirmed) {
+            let u: UnitRequest = {
+                id: selectedProduct.id,
+                units: units.map((value) => {
+                return {
+                    name: value.name,
+                    price: parseInt(value.price),
+                    weight: parseInt(value.weight),
+                    active: value.active,
+                    changed: value.changed,
+                    deleted: value.deleted,
+                    image: value.image ?? ""
+                }
+            })};
+            u.units = u.units.filter((value) => value.changed || value.deleted);
+            editUnit(u);
+            confirm(false);
+        }
+    }, [confirmed]);
+
+    return <div className={showUnitDialog ? styles.dialogBackground : styles.hidden} onMouseDown={() => setShowUnitDialog(false)}>
+        <div className={styles.editDialog} onMouseDown={(e) => e.stopPropagation()}>
+            <h2>Đơn vị bán hàng</h2>
+            <p className={styles.message}>{message}</p>
+            {units.map((value, index) => (value.deleted) ? <></> : <><div key={index} className={(value.active) ? styles.unitContainer : styles.hiddenContainer}>
                 <div>
                     <p>Tên đơn vị</p>
                     <input type='text'
                     value={value.name}
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, name: e.target.value} : subValue))}/>
+                        (index === subIndex) ? {...subValue, name: e.target.value, changed: true} : subValue))}/>
                 </div>
                 <div>
                     <p>Giá</p>
                     <input type='number'
                     value={value.price}
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, price: e.target.value} : subValue))}/>
+                        (index === subIndex) ? {...subValue, price: e.target.value, changed: true} : subValue))}/>
                 </div>
                 <div>
                     <p>Trọng số</p>
                     <input type='number'
                     value={value.weight}
                     onChange={(e) => setUnits(units.map((subValue, subIndex) => 
-                        (index === subIndex) ? {...subValue, weight: e.target.value} : subValue))}/>
+                        (index === subIndex) ? {...subValue, weight: e.target.value, changed: true} : subValue))}/>
                 </div>
                 <CldUploadButton 
                 className={styles.upload}
                 uploadPreset="next-unsigned"
                 onUpload={(result, widget) => {
-                    if (value.image) {
-                        fetch(`/api/image?id=${value.image}`)
-                    }
                     setUnits(units.map((subValue, subIndex) => 
-                    (index === subIndex) ? {...subValue, image: (result?.info as any).public_id} : subValue))
+                    (index === subIndex) ? {...subValue, image: (result?.info as any).public_id, changed: true} : subValue))
                     widget.close();
                 }}/>
-                <button className={styles.remove} onClick={() => setUnits(units.filter((v, i) => (i != index)))}>
+                {(value.active) ? <button className={styles.remove} onClick={() => setUnits(units.map((subValue, subIndex) => 
+                    (index === subIndex) ? {...subValue, deleted: true} : subValue))}>
                     <FontAwesomeIcon icon={faXmark}/>
-                </button>
-                
-            </div>)}
+                </button> : <></>}
+            </div>
+            {(value.image) ? <CldImage width={200} height={120} src={value.image} alt={value.name}/> : <></>}</>)}
             <button onClick={() => setUnits([...units, {
                 name: "",
                 price: "",
-                weight: ""
+                weight: "",
+                active: true,
+                changed: true
             }])}>
                 <FontAwesomeIcon icon={faPlus}/>
             </button>
@@ -298,7 +297,7 @@ function EditDialog() {
                 <button onClick={() => {
                     confirm(true);
                 }}>Xác nhận</button>
-                <button onClick={() => setShowEditDialog(false)}>Huỷ</button>
+                <button onClick={() => setShowUnitDialog(false)}>Huỷ</button>
             </div>
         </div>
     </div>;
@@ -346,4 +345,4 @@ function DelDialog() {
     </div>;
 }
 
-export {AddDialog, EditDialog, DelDialog};
+export {AddDialog, EditDialog, UnitDialog, DelDialog};

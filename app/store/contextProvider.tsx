@@ -7,6 +7,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     const [data, setData] = useState<ProductData[]>([]);
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showUnitDialog, setShowUnitDialog] = useState(false);
     const [showDelDialog, setShowDelDialog] = useState(false);
     const [selectedProduct, select] = useState<ProductData>({
         id: 0,
@@ -25,6 +26,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         data, setData, 
         showAddDialog, setShowAddDialog,
         showEditDialog, setShowEditDialog,
+        showUnitDialog, setShowUnitDialog,
         showDelDialog, setShowDelDialog, 
         selectedProduct, select,
         updated, update}}>

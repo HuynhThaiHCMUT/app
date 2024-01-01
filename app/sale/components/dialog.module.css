@@ -153,6 +153,7 @@
 .message {
     color: red;
     align-self: center;
+    text-wrap: wrap;
 }
 
 .hidden {

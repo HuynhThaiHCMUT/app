@@ -4,8 +4,6 @@ import { clientPromise, sql } from '../db';
 export async function GET(req: NextRequest) {
     const client = await clientPromise;
 
-    //TODO: Get employee data from database
-
     if (req.nextUrl.searchParams.has("start") && req.nextUrl.searchParams.has("end")) {
         const start = req.nextUrl.searchParams.get("start") ?? "";
         const end = req.nextUrl.searchParams.get("end") ?? "";

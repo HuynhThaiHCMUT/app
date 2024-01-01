@@ -2,14 +2,20 @@ type Unit = {
     name: string,
     price: number,
     weight: number,
-    image?: string
+    active: boolean,
+    image?: string,
+    changed?: boolean,
+    deleted?: boolean
 }
 
 type UnconvertedUnit = {
     name: string,
     price: string,
     weight: string,
-    image?: string
+    active: boolean,
+    image?: string,
+    changed?: boolean,
+    deleted?: boolean
 }
 
 type ProductData = {
@@ -19,7 +25,7 @@ type ProductData = {
     quantity: number,
     basePrice: number,
     status: string,
-    units: Unit[]
+    units?: Unit[]
 }
 
 type Category = {
@@ -45,6 +51,11 @@ type Schedule = {
 type ScheduleRequest = {
     id: number,
     schedule: Schedule[]
+}
+
+type UnitRequest = {
+    id: number,
+    units: Unit[]
 }
 
 type StaffData = {
