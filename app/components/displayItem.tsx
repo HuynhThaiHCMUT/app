@@ -8,5 +8,6 @@ export default function DisplayItem({product, unit} : {product: ProductData, uni
         {(unit.image) ? <CldImage width={150} height={120} src={unit.image} alt={`Image: ${unit.image}`}/> : <FontAwesomeIcon className={styles.itemIcon} icon={faImage} size="2xl"/>}
         <p>{product.name}</p>
         <p>{unit.name}</p>
+        <p>{`Giá: ${unit.price}`}</p>
     </div>
 }

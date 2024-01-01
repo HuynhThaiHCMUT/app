@@ -80,7 +80,7 @@
     font-weight: bold;
 }
 
-.display {
+.display, .profitDisplay {
     flex: 1;
     max-height: 50vh;
     border-left: 0.1rem solid #A9A9A9;
@@ -100,7 +100,29 @@
     font-size: 1.15rem;
     align-items: center;
 }
+
+.profitDisplay > div {
+    display: grid;
+    height: 3rem;
+    border-bottom: 0.1rem solid #A9A9A9;
+    justify-items: center;
+    grid-template-columns: 10% 30% 20% 20% 20%;
+    font-size: 1.15rem;
+    align-items: center;
+}
+
 .stickyHeader{
+    display: grid;
+    height: 3rem;
+    border-bottom: 0.1rem solid #A9A9A9;
+    justify-items: center;
+    grid-template-columns: 10% 30% 20% 20% 20%;
+    font-size: 1.15rem;
+    align-items: center;
+    font-weight: 600;
+}
+
+.profitHeader {
     display: grid;
     height: 3rem;
     border-bottom: 0.1rem solid #A9A9A9;
@@ -110,6 +132,7 @@
     align-items: center;
     font-weight: 600;
 }
+
 .fw500{
     font-weight: 600;
     font-size: 1.25;
@@ -172,7 +195,6 @@
     padding-top: 2rem;
     cursor: pointer;
     border-right: 0.1rem solid#f2f2f2;
-    height: 45rem;
  }
  .sidebarTitle{
     background: white;

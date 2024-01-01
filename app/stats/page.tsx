@@ -10,52 +10,58 @@ export default function Statistic() {
     const [top, setTop] = useState(10);
     const [start, setStart] = useState(new Date());
     const [end, setEnd] = useState(new Date());
-    const [data1,setData1] = useState<OutOfStockProduct[]>([]);
-    const [data, setData] = useState<TopProductData[]>([]);
+    const [stockData,setStockData] = useState<OutOfStockProduct[]>([]);
+    const [topData, setTopData] = useState<TopProductData[]>([]);
+    const [profitData, setProfitData] = useState<ProfitData[]>([]);
+    const [sumRev, setSumRev] = useState(0);
+    const [sumProf, setSumProf] = useState(0);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState<string>('outOfStock');
     const [updated, update] = useState(false);
 
     // Các mục trong sidebar
     const sidebarItems = [
         { label: 'Danh sách sản phẩm hết hàng', id: 'outOfStock' },
-        { label: 'Danh sách sản phẩm đã bán', id: 'topProduct' },
+        { label: 'Danh sách sản phẩm bán chạy', id: 'topProduct' },
         { label: 'Báo cáo lợi nhuận', id: 'profitReport' },
     ];
         
     useEffect(() => {
-        async function getData() {
+        async function getTopData() {
             let res = await fetch(`/api/stats?func=top&top=${top}&start=${start.getTime().toString()}&end=${end.getTime().toString()}`, {cache: "no-store"});
             if (res.ok) {
                 let products: TopProductData[] = await res.json();
-                setData(products);
+                setTopData(products);
             }
             else console.log("Failed to fetch data");
         };
-        getData();
-    }, [updated]);
-
-    useEffect(() => {
-        async function getData() {
+        async function getStockData() {
             try {
-                const res = await fetch('/api/stats?func=outofstock', { cache: 'no-store' });
-
+                const res = await fetch('/api/stats?func=stock', { cache: 'no-store' });
                 if (res.ok) {
                     let outOfStockProducts: OutOfStockProduct[] = await res.json();
-                    
                     if (outOfStockProducts && outOfStockProducts.length > 0) {
-                        setData1(outOfStockProducts);
-                    } else {
-                        console.log('Empty or invalid data received from the API');
-                    }
-                } else {
-                    console.log('Failed to fetch out-of-stock data. Status:', res.status);
-                }
+                        setStockData(outOfStockProducts);
+                    } else console.log('Empty or invalid data received from the API');
+                } else console.log('Failed to fetch out-of-stock data. Status:', res.status);
             } catch (error) {
                 console.error('Error fetching out-of-stock data:', error);
             }
         };
-        getData();
+        async function getProfitData() {
+            let res = await fetch(`/api/stats?func=profit&top=${top}&start=${start.getTime().toString()}&end=${end.getTime().toString()}`, {cache: "no-store"});
+            if (res.ok) {
+                let profit: ProfitResponse = await res.json();
+                setProfitData(profit.data);
+                setSumRev(profit.sumRev);
+                setSumProf(profit.sumProf);
+            }
+            else console.log("Failed to fetch data");
+        };
+        getTopData();
+        getStockData();
+        getProfitData();
     }, [updated]);
+
     return (
         <div className={styles.pageContainer}>
           {/* Sidebar */}
@@ -104,7 +110,7 @@ export default function Statistic() {
                   <p>Tên sản phẩm</p>
                   <p>Số lượng trong kho</p>
                 </div>
-                {data1.map((value, index) => (
+                {stockData.map((value, index) => (
                   <div key={index}>
                     <p>{index + 1}</p>
                     <p>{value.name}</p>
@@ -120,7 +126,7 @@ export default function Statistic() {
     function renderTopProductContent() {
         return (
           <div className={styles.salesReport}>
-            <p>Danh sách top sản phẩm trending</p>
+            <p>Danh sách top sản phẩm bán chạy</p>
             <div className={styles.salesReportContainer}>
               <div className={styles.salesReportInput}>
                 <p>Ngày bắt đầu</p>
@@ -147,7 +153,7 @@ export default function Statistic() {
                 <p>Số lượng bán</p>
               </div>
               
-              {data.map((value, index) => (
+              {topData.map((value, index) => (
                 <div key={index}>
                   <p>{index + 1}</p>
                   <p>{value.name}</p>
@@ -173,6 +179,34 @@ export default function Statistic() {
                 <FlatPickr value={end} onChange={([date]) => setEnd(date)} />
               </div>
               <button onClick={() => update(!updated)}>Tìm kiếm</button>
+            </div>
+            <div className={styles.profitDisplay}>
+              <div className={styles.profitHeader}>
+                <p>STT</p>
+                <p>Tên sản phẩm</p>
+                <p>Số lượng bán</p>
+                <p>Doanh thu</p>
+                <p>Lợi nhuận</p>
+              </div>
+              
+              {profitData.map((value, index) => (
+                <div key={index}>
+                  <p>{index + 1}</p>
+                  <p>{value.name}</p>
+                  <p>{value.totalSold}</p>
+                  <p>{value.revenue}</p>
+                  <p>{value.profit}</p>
+                </div>
+              ))}
+
+              <div className={styles.profitHeader}>
+                <p></p>
+                <p>Tổng :</p>
+                <p></p>
+                <p>{sumRev}</p>
+                <p>{sumProf}</p>
+              </div>
+
             </div>
           </div>
         );

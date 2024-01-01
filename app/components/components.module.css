@@ -52,6 +52,7 @@
 .displayItem > p {
     text-align: center;
     text-wrap: wrap;
+    margin-top: 0.5rem;
 }
 
 .itemIcon {

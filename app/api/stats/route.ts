@@ -16,13 +16,22 @@ export async function GET(req: NextRequest) {
                 data = (await client.execute("CALL GetTopSellingProductsProcedure(?, ?, ?)", [parseInt(top), new Date(parseInt(start)), new Date(parseInt(end))]))[0] as TopProductData[];
 
                 return NextResponse.json(data[0]);
-            case "outofstock":
+            case "stock":
                 data = (await client.execute("CALL GetLowQuantityProducts()" ))[0]as OutOfStockProduct[];
 
                 return NextResponse.json(data[0]);
             case "profit":
-
-                return NextResponse.json([]);
+                let profit = (await client.execute("CALL GetTotalProfit(?, ?)", [new Date(parseInt(start)), new Date(parseInt(end))]))[0] as ProfitData[][];
+                console.log(profit);
+                let sumRev = 0;
+                let sumProf = 0;
+                for (const p of profit[0]) {
+                    sumRev += parseInt(p.revenue);
+                    sumProf += parseInt(p.profit);
+                }
+                console.log(sumRev);
+                console.log(sumProf);
+                return NextResponse.json({data: profit[0], sumRev: sumRev, sumProf: sumProf});
         }
     } catch (error: any) {
         console.log(error);

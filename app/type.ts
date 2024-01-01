@@ -88,6 +88,19 @@ type TopProductData = {
     totalSold: number
 }
 
+type ProfitData = {
+    name: string,
+    totalSold: string,
+    revenue: string,
+    profit: string,
+}
+
+type ProfitResponse = {
+    data: ProfitData[],
+    sumRev: number,
+    sumProf: number
+}
+
 type DatabaseResponse = {
     success: boolean,
     message: string
