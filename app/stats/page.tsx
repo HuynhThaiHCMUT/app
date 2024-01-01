@@ -58,24 +58,24 @@ export default function Statistic() {
     }, [updated]);
     return (
         <div className={styles.pageContainer}>
-            {/* Sidebar */}
+          {/* Sidebar */}
+          <div className={styles.sidebarSection}>
+            <div className={styles.sidebarTitle}><p>Thống kê cửa hàng</p></div>
             <div className={styles.sidebar}>
-                <ul>
-                    {sidebarItems.map(item => (
-                        <li key={item.id} onClick={() => handleSidebarItemClick(item.id)}>
-                            {item.label}
-                        </li>
-                    ))}
-                </ul>
+              <ul>
+                {sidebarItems.map((item) => (
+                  <li key={item.id} onClick={() => handleSidebarItemClick(item.id)}>
+                    {item.label}
+                  </li>
+                ))}
+              </ul>
             </div>
+          </div>
     
-            {/* Main Content */}
-            <div className={styles.mainContent}>
-                {renderContent()}
-            </div>
+          {/* Main Content */}
+          <div className={styles.mainContent}>{renderContent()}</div>
         </div>
-    );
-
+      );
     function handleSidebarItemClick(itemId: string) {
         setSelectedSidebarItem(itemId);
     }
@@ -95,88 +95,88 @@ export default function Statistic() {
 
     function renderOutOfStockContent() {
         return (
-            <div className={styles.outOfStock}>
-                <p>Danh sách sản phẩm hết hàng</p>
-                {data1.length > 0 ? (
-                    <div className={styles.display}>
-                        <div>
-                            <p>STT</p>
-                            <p>Tên sản phẩm</p>
-                            <p>Số lượng bán</p>
-                        </div>
-                        {data1.map((value, index) => (
-                            <div key={index}>
-                                <p>{index + 1}</p>
-                                <p>{value.name}</p>
-                                <p>{value.quantity}</p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p>No out-of-stock products found.</p>
-                )}
-                
-            </div>
+          <div className={styles.outOfStock}>
+            <p>Danh sách sản phẩm hết hàng</p>
+           
+              <div  className={styles.display}>
+                <div className={styles.fw500}>
+                  <p>STT</p>
+                  <p>Tên sản phẩm</p>
+                  <p>Số lượng trong kho</p>
+                </div>
+                {data1.map((value, index) => (
+                  <div key={index}>
+                    <p>{index + 1}</p>
+                    <p>{value.name}</p>
+                    <p>{value.quantity}</p>
+                  </div>
+                ))}
+              </div>
+          </div>
         );
-    }
+      }
+    
 
     function renderTopProductContent() {
         return (
-            <div className={styles.salesReport}>
-                    <p>Top sản phẩm đã bán</p>
-                    <div className={styles.salesReportContainer}>
-                    <div>
-                        <p>Ngày bắt đầu</p>
-                        <FlatPickr value={start} onChange={([date]) => setStart(date)}/>
-                    </div>
-                    <div>
-                        <p>Ngày kết thúc</p>
-                        <FlatPickr value={end} onChange={([date]) => setEnd(date)}/>
-                    </div>
-                    <div>
-                        <p>Top</p>
-                        <input type='number' value={top} onChange={(e) => setTop(parseInt(e.target.value))}/>
-                    </div>
-                    <button onClick={() => update(!updated)}>
-                        Tìm kiếm
-                    </button>
+          <div className={styles.salesReport}>
+            <p>Danh sách top sản phẩm trending</p>
+            <div className={styles.salesReportContainer}>
+              <div className={styles.salesReportInput}>
+                <p>Ngày bắt đầu</p>
+                <FlatPickr value={start} onChange={([date]) => setStart(date)} />
+              </div>
+              <div className={styles.salesReportInput}>
+                <p>Ngày kết thúc</p>
+                <FlatPickr value={end} onChange={([date]) => setEnd(date)} />
+              </div>
+              <div className={styles.salesReportInput}>
+                <p>Top</p>
+                <input
+                  type="number"
+                  value={top}
+                  onChange={(e) => setTop(parseInt(e.target.value))}
+                />
+              </div>
+              <button onClick={() => update(!updated)}>Tìm kiếm</button>
+            </div>
+            <div className={styles.display}>
+              <div className={styles.stickyHeader}>
+                <p>STT</p>
+                <p>Tên sản phẩm</p>
+                <p>Số lượng bán</p>
+              </div>
+              
+              {data.map((value, index) => (
+                <div key={index}>
+                  <p>{index + 1}</p>
+                  <p>{value.name}</p>
+                  <p>{value.totalSold}</p>
                 </div>
-                <div className={styles.display}>
-                     <div>
-                        <p>STT</p>
-                        <p>Tên sản phẩm</p>
-                        <p>Số lượng bán</p>
-                    </div>
-                    {data.map((value, index) => <div key={index}>
-                        <p>{index + 1}</p>
-                        <p>{value.name}</p>
-                        <p>{value.totalSold}</p>
-                    </div>)}
-                    </div>
-                </div>
+              ))}
+            </div>
+          </div>
         );
-    }
+      }
 
     function renderProfitReportContent() {
         return (
-            <div className={styles.profitReport}>
-                <p>Báo cáo lợi nhuận</p>
-                <div className={styles.profitReportContainer}>
-                    <div>
-                        <p>Ngày bắt đầu</p>
-                        <FlatPickr value={start} onChange={([date]) => setStart(date)}/>
-                    </div>
-                    <div>
-                        <p>Ngày kết thúc</p>
-                        <FlatPickr value={end} onChange={([date]) => setEnd(date)}/>
-                    </div>
-                    <button onClick={() => update(!updated)}>
-                    Tìm kiếm
-                    </button>
-                </div>
+          <div className={styles.profitReport}>
+            <p>Báo cáo lợi nhuận</p>
+            <div className={styles.salesReportContainer}>
+              <div className={styles.salesReportInput}>
+                <p>Ngày bắt đầu</p>
+                <FlatPickr value={start} onChange={([date]) => setStart(date)} />
+              </div>
+              <div className={styles.salesReportInput}>
+                <p>Ngày kết thúc</p>
+                <FlatPickr value={end} onChange={([date]) => setEnd(date)} />
+              </div>
+              <button onClick={() => update(!updated)}>Tìm kiếm</button>
             </div>
+          </div>
         );
-    }
+      }
 }
             // return <div className={styles.stats}>
             //     <div className={styles.inputContainer}>
