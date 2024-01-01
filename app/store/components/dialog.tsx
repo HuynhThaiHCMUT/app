@@ -91,11 +91,13 @@ function AddDialog() {
             <input type='text'
             value={desc}
             onChange={(e) => setDesc(e.target.value)}/>
-            <p>Số lượng</p>
+            <div className={styles.dialogColumn}>
+            <p className={styles.mg12rem}>Số lượng</p>
+            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
+            </div>
             <input type='number'
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}/>
-            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
             <p>Giá gốc</p>
             <input type='number'
             value={basePrice}
@@ -236,11 +238,13 @@ function EditDialog() {
             <input type='text'
             value={desc}
             onChange={(e) => setDesc(e.target.value)}/>
-            <p>Số lượng</p>
+            <div className={styles.dialogColumn}>
+            <p className={styles.mg12rem}>Số lượng</p>
+            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
+            </div>
             <input type='number'
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}/>
-            <p>Trạng thái: {parseInt(quantity) <= 0 ? "Hết hàng" : (parseInt(quantity) <= 10) ? "Sắp hết hàng" : "Còn hàng"} </p>
             <p>Giá gốc</p>
             <input type='number'
             value={basePrice}
