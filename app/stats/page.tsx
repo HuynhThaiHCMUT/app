@@ -10,7 +10,7 @@ export default function Statistic() {
     const [top, setTop] = useState(10);
     const [start, setStart] = useState(new Date());
     const [end, setEnd] = useState(new Date());
-    
+    const [data1,setData1] = useState<OutOfStockProduct[]>([]);
     const [data, setData] = useState<TopProductData[]>([]);
     const [selectedSidebarItem, setSelectedSidebarItem] = useState<string>('outOfStock');
     const [updated, update] = useState(false);
@@ -33,7 +33,29 @@ export default function Statistic() {
         };
         getData();
     }, [updated]);
+    useEffect(() => {
+        async function getData() {
+            try {
+                const res = await fetch('/api/outofstock/route.ts', { cache: 'no-store' });
     
+                if (res.ok) {
+                    let outOfStockProducts: OutOfStockProduct[] = await res.json();
+                    
+                    if (outOfStockProducts && outOfStockProducts.length > 0) {
+                        setData1(outOfStockProducts);
+                    } else {
+                        console.log('Empty or invalid data received from the API');
+                    }
+                } else {
+                    console.log('Failed to fetch out-of-stock data. Status:', res.status);
+                }
+            } catch (error) {
+                console.error('Error fetching out-of-stock data:', error);
+            }
+        };
+    
+        getData();
+    }, [updated]);
     return (
         <div className={styles.pageContainer}>
             {/* Sidebar */}
@@ -75,6 +97,17 @@ export default function Statistic() {
         return (
             <div className={styles.outOfStock}>
                 <p>Danh sách sản phẩm hết hàng</p>
+                {data1.length > 0 ? (
+                    data1.map((value, index) => (
+                        <div key={index}>
+                            <p>{index + 1}</p>
+                            <p>{value.name}</p>
+                            <p>{value.quantity}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No out-of-stock products found.</p>
+                )}
             </div>
         );
     }

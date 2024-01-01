@@ -66,6 +66,11 @@ type TotalWorkingHoursData = {
     totalHours: number
 }
 
+type OutOfStockProduct = {
+    name:string,
+    quantity:number
+}
+
 type TopProductData = {
     id: number,
     name: string,
