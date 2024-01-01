@@ -18,13 +18,13 @@ export default function Statistic() {
     // Các mục trong sidebar
     const sidebarItems = [
         { label: 'Danh sách sản phẩm hết hàng', id: 'outOfStock' },
-        { label: 'Danh sách sản phẩm đã bán', id: 'salesReport' },
+        { label: 'Danh sách sản phẩm đã bán', id: 'topProduct' },
         { label: 'Báo cáo lợi nhuận', id: 'profitReport' },
     ];
         
     useEffect(() => {
         async function getData() {
-            let res = await fetch(`/api/stats?top=${top}&start=${start.getTime().toString()}&end=${end.getTime().toString()}`, {cache: "no-store"});
+            let res = await fetch(`/api/stats?func=top&top=${top}&start=${start.getTime().toString()}&end=${end.getTime().toString()}`, {cache: "no-store"});
             if (res.ok) {
                 let products: TopProductData[] = await res.json();
                 setData(products);
@@ -33,11 +33,12 @@ export default function Statistic() {
         };
         getData();
     }, [updated]);
+
     useEffect(() => {
         async function getData() {
             try {
-                const res = await fetch('/api/outofstock/route.ts', { cache: 'no-store' });
-    
+                const res = await fetch('/api/stats?func=outofstock', { cache: 'no-store' });
+
                 if (res.ok) {
                     let outOfStockProducts: OutOfStockProduct[] = await res.json();
                     
@@ -53,7 +54,6 @@ export default function Statistic() {
                 console.error('Error fetching out-of-stock data:', error);
             }
         };
-    
         getData();
     }, [updated]);
     return (
@@ -84,8 +84,8 @@ export default function Statistic() {
         switch (selectedSidebarItem) {
             case 'outOfStock':
                 return renderOutOfStockContent();
-            case 'salesReport':
-                return renderSalesReportContent();
+            case 'topProduct':
+                return renderTopProductContent();
             case 'profitReport':
                 return renderProfitReportContent();
             default:
@@ -98,24 +98,32 @@ export default function Statistic() {
             <div className={styles.outOfStock}>
                 <p>Danh sách sản phẩm hết hàng</p>
                 {data1.length > 0 ? (
-                    data1.map((value, index) => (
-                        <div key={index}>
-                            <p>{index + 1}</p>
-                            <p>{value.name}</p>
-                            <p>{value.quantity}</p>
+                    <div className={styles.display}>
+                        <div>
+                            <p>STT</p>
+                            <p>Tên sản phẩm</p>
+                            <p>Số lượng bán</p>
                         </div>
-                    ))
+                        {data1.map((value, index) => (
+                            <div key={index}>
+                                <p>{index + 1}</p>
+                                <p>{value.name}</p>
+                                <p>{value.quantity}</p>
+                            </div>
+                        ))}
+                    </div>
                 ) : (
                     <p>No out-of-stock products found.</p>
                 )}
+                
             </div>
         );
     }
 
-    function renderSalesReportContent() {
+    function renderTopProductContent() {
         return (
             <div className={styles.salesReport}>
-                    <p>Danh sách sản phẩm đã bán</p>
+                    <p>Top sản phẩm đã bán</p>
                     <div className={styles.salesReportContainer}>
                     <div>
                         <p>Ngày bắt đầu</p>
@@ -162,9 +170,9 @@ export default function Statistic() {
                         <p>Ngày kết thúc</p>
                         <FlatPickr value={end} onChange={([date]) => setEnd(date)}/>
                     </div>
-                        <button onClick={() => update(!updated)}>
-                        Tìm kiếm
-                        </button>
+                    <button onClick={() => update(!updated)}>
+                    Tìm kiếm
+                    </button>
                 </div>
             </div>
         );
