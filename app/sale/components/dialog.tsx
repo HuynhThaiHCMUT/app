@@ -116,7 +116,7 @@ function EditDialog() {
 }
 
 function ConfirmDialog() {
-    const {showConfirmDialog, setShowConfirmDialog, invoice, setInvoice, total, setTotal} = useContext(Context);
+    const {showConfirmDialog, setShowConfirmDialog, invoice, setInvoice, total, setTotal, update, updated} = useContext(Context);
     const [confirmed, confirm] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -131,6 +131,7 @@ function ConfirmDialog() {
             else {
                 let dbres: DatabaseResponse = await res.json();
                 if (dbres.success) {
+                    update(!updated);
                     setInvoice([]);
                     setTotal(0);
                     setShowConfirmDialog(false);

@@ -29,7 +29,8 @@ export async function POST(req: NextRequest) {
 
         for (const i of invoice) {
             sum += i.total;
-            client.execute("INSERT INTO Order_include (pid, unit_name, oid, quantity, price) VALUES (?, ?, ?, ?, ?)", [i.product.id, i.unit.name, oid, i.quantity, i.unit.price])
+            client.execute("INSERT INTO Order_include (pid, unit_name, oid, quantity, price) VALUES (?, ?, ?, ?, ?)", [i.product.id, i.unit.name, oid, i.quantity, i.unit.price]);
+            client.execute("UPDATE Product SET quantity = ? WHERE pid = ?", [i.product.quantity-i.quantity*i.unit.weight, i.product.id]);
         }
 
         client.execute("UPDATE Order_table SET sum_total = ? WHERE oid = ?", [sum, oid]);
