@@ -57,6 +57,7 @@
     max-width: 10rem;
     text-align: center;
     text-wrap: wrap;
+    white-space: normal;
     margin-top: 0.5rem;
 }
 
