@@ -34,9 +34,7 @@ export default function Store() {
   const [showFilter, setShowFilter] = useState(false);
   useEffect(() => {
     async function getData() {
-      let res = await fetch(`/api/product?q=${q}&tag=${tag}&sort=${sort}`, {
-        cache: "no-store",
-      });
+      let res = await fetch(`/api/product?q=${q}&tag=${tag}&sort=${sort}`, {cache: "no-store"});
       if (res.ok) {
         let products = await res.json();
         setData(products);

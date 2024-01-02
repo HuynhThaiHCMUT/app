@@ -202,7 +202,7 @@ export default function Home() {
                   <button className={styles.buttonLeft} onClick={scrollLeft}> <FontAwesomeIcon icon={faLessThan} /></button>
                   <button className={styles.buttonRight} onClick={scrollRight}><FontAwesomeIcon icon={faGreaterThan} /></button>
               </div>
-              <div className={styles.displayList} ref={productListRef}> {data.map((value: ProductData) => value.units?.map((subValue: Unit) => (subValue.active) ? <DisplayItem product={value} unit={subValue} key={value.id} /> : <></>))} </div>
+              <div className={styles.displayList} ref={productListRef}> {data.map((value: ProductData) => (value.units?.map((subValue: Unit) => (subValue.active) ? <DisplayItem product={value} unit={subValue} key={value.id + subValue.name} /> : <></>)))} </div>
           </div>
           <div className={styles.trendTitle}>
           <h2>  Tiêu chí cửa hàng</h2>

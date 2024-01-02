@@ -41,15 +41,20 @@
 }
 
 .displayItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-radius: 1rem;
     padding: 1rem;
     margin: 1rem;
     background-color: white;
-    width: 12rem;
+    min-width: 12rem;
+    max-width: 12rem;
     height: 18rem;
 }
 
 .displayItem > p {
+    max-width: 10rem;
     text-align: center;
     text-wrap: wrap;
     margin-top: 0.5rem;
